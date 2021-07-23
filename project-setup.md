@@ -57,6 +57,7 @@ As a site visitor, I save maps to my favourites tab, because the data is stored 
   - id (PK)
   - creator_id (FK)
   - name
+  - location
 
 ### favourited_maps
   - id (PK)
@@ -76,5 +77,3 @@ As a site visitor, I save maps to my favourites tab, because the data is stored 
   - id (PK)
   - map_id (FK)
   - pin_id (FK)
-
-pin -> map one to many
