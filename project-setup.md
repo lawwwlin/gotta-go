@@ -1,6 +1,35 @@
-### User story 
+## Schedule
 
-## MVD
+### Friday
+  - project set-up
+  - ERD ready 
+  - list of routes ready
+
+### Saturday
+  - 
+
+### Sunday
+  - 
+
+### Monday
+  - 
+
+
+### Tuesday
+  - 
+
+### Wednesday
+  - Extra
+
+### Thursday
+  - final check: requirements
+  - presentable project 
+
+-------------------------------------------------------------------
+
+## User story 
+
+### MVD
 
 As a human, I can view the nearest bathroom, because of the TLT_map
 
