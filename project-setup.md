@@ -2,12 +2,13 @@
 
 ### Friday
   - project set-up
-  - ERD ready 
+  - ERD ready
   - list of routes ready
 
 ### Weekend meeting at Saturday 3pm, Sunday 10am
   - get database ready
-  - 
+  - get server set-up
+  - get front-end ready
 
 ### Monday meeting at 10am, 3:30pm 
   - 
@@ -16,11 +17,11 @@
   - 
 
 ### Wednesday meeting at 10am, 3:30pm 
-  - Extra
+  - 
 
 ### Thursday meeting at 10am, 3:30pm 
   - final check: requirements
-  - presentable project 
+  - presentable project
 
 -------------------------------------------------------------------
 
