@@ -69,7 +69,7 @@ As a site visitor, I save maps to my favourites tab, because the data is stored 
   - description
   - images
   - location
-  - user_rating
+  - user_rating (stretch)
 
 ### map_pins
   - id (PK)
