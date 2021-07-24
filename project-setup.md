@@ -5,23 +5,20 @@
   - ERD ready 
   - list of routes ready
 
-### Saturday
+### Weekend meeting at Saturday 3pm, Sunday 10am
+  - get database ready
   - 
 
-### Sunday
+### Monday meeting at 10am, 3:30pm 
   - 
 
-### Monday
+### Tuesday meeting at 10am, 3:30pm 
   - 
 
-
-### Tuesday
-  - 
-
-### Wednesday
+### Wednesday meeting at 10am, 3:30pm 
   - Extra
 
-### Thursday
+### Thursday meeting at 10am, 3:30pm 
   - final check: requirements
   - presentable project 
 
@@ -77,3 +74,23 @@ As a site visitor, I save maps to my favourites tab, because the data is stored 
   - id (PK)
   - map_id (FK)
   - pin_id (FK)
+
+-------------------------------------------------------------------
+
+## list of routes
+
+GET('/:location')
+
+### maps
+  Browse    GET('/maps')
+  Read      GET('/maps/:map_id')
+  Edit      PATCH('/maps/:map_id')
+  Add       POST('/maps/:map_id')
+  Delete    DELETE('/maps/:map_id')
+
+### pins
+  Browse    GET('/pins')
+  Read      GET('/pins/:pins_id')
+  Edit      PATCH('/pins/:pins_id')
+  Add       POST('/pins/:pins_id')
+  Delete    DELETE('/pins/:pins_id')
