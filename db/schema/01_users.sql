@@ -4,5 +4,6 @@ CREATE TABLE users (
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
   -- point (latitude, longitude) of floating point numbers up to 8byte
-  location point NOT NULL
+  latitude FLOAT NOT NULL,
+  longitude FLOAT NOT NULL
 );
