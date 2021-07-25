@@ -28,9 +28,8 @@ module.exports = (db) => {
     const values = req.params.id;
     db.query(`SELECT * FROM maps WHERE maps.id = $1`, [values])
     .then (data => {
-      console.log(data)
       const maps = data.rows;
-      res.json({ maps })
+      res.json({ maps }) // change to res.render("maps") later on
     })
     .catch(err => {
       res.status(500)
@@ -38,6 +37,26 @@ module.exports = (db) => {
     })
   })
 
+    //get favourited maps
+    router.get("/:id/favourited_maps", (req, res) => {
+      const values = req.params.id;
+      db.query(`SELECT * FROM favourited_maps
+      JOIN maps ON maps.id = map_id
+      JOIN users ON users.id = users_id
+      WHERE user_id = $1;`, [values])
+        .then(data => {
+          const favorites = data.rows;
+          res.json({ favorites }); // change to res.render("favourite_maps") later on
+        })
+        .catch(err => {
+          res
+            .status(500)
+            .json({ error: err.message });
+        });
+    });
+
+
+  //delete map
   router.delete("/:id", (req, res) => {
     const values = req.params.id;
     db.query(`DELETE FROM maps WHERE id = $1`, [values])
@@ -50,6 +69,7 @@ module.exports = (db) => {
           .json({ success: false, error: err });
       });
   });
+
 
   return router;
 };
