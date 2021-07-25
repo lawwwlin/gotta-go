@@ -26,7 +26,7 @@ module.exports = (db) => {
   //retrieves single map via map id
   router.get("/:id", (req, res) => {
     const values = req.params.id;
-    db.query(`SELECT * FROM maps WHERE maps.id = $1`, [values])
+    db.query(`SELECT * FROM maps WHERE maps.id = $1;`, [values])
       .then(data => {
         const maps = data.rows;
         res.json({ maps }) // change to res.render("maps") later on
@@ -46,7 +46,7 @@ module.exports = (db) => {
       WHERE user_id = $1;`, [values])
       .then(data => {
         const favorites = data.rows;
-        res.json({ favorites }); // change to res.render("favourite_maps") later on
+        res.json({ favorites });
       })
       .catch(err => {
         res
