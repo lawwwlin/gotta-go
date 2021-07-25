@@ -72,6 +72,24 @@ module.exports = (db) => {
       });
   });
 
+
+  //add map
+  router.post("/:id", (req, res) => {
+    const values = req.params.id;
+    db.query(`INSERT INTO maps (creator_id, area, name) VALUES ($1, $2, $3) RETURNING *`, [creator_id, area, name])
+      .then(data => {
+        const maps = data.rows[0];
+        res
+          .json({ maps });
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message })
+      })
+  })
+
+
   //delete map
   router.delete("/:id", (req, res) => {
     const values = req.params.id;
