@@ -42,7 +42,7 @@ module.exports = (db) => {
       const values = req.params.id;
       db.query(`SELECT * FROM favourited_maps
       JOIN maps ON maps.id = map_id
-      JOIN users ON users.id = users_id
+      JOIN users ON users.id = users.id
       WHERE user_id = $1;`, [values])
         .then(data => {
           const favorites = data.rows;
