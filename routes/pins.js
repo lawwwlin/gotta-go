@@ -4,6 +4,22 @@ const router = express.Router();
 
 module.exports = (db) => {
 
+  //add map
+  router.post("/:id", (req, res) => {
+    const values = req.params.id;
+    db.query(`INSERT INTO pins (user_id, title, description, latitude, longitude, image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [user_id, title, description, latitude, longitude, image])
+      .then(data => {
+        const pins = data.rows[0];
+        res
+          .json({ pins });
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message })
+      })
+  })
+
   //edit pins
   router.patch("/:id", (req, res) => {
     const values = req.params.id;
