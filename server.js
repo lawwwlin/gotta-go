@@ -41,6 +41,7 @@ const pinsRoutes = require("./routes/pins")
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
 app.use("/api/maps", mapsRoutes(db));
+app.use("/api/pins", pinsRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
 // Home page
