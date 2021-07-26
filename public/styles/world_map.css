@@ -1,0 +1,8 @@
+div#map{
+  height: 100vh;
+  width: 80vw;
+  float:left;
+  z-index: -1;
+  padding-right: 0vw;
+}
+
