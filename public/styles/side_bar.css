@@ -1,22 +1,26 @@
-.nav-button {
+.nav{
+  float:right;
+}
+
+.nav-button1 {
   float: left;
   background-color: transparent;
   border: none;
   cursor: pointer;
-  font-family: Ionicons;
   z-index: 100;
+  font-size: large;
 }
 
-.nav-button:hover {
-  color: red;
+.nav-button1:hover {
+  background-color: pink;
 }
 
-.nav-button:before {
-  content: '\f20d';
+.nav-button1:before {
+  content: '✖';
 }
 
-.nav-buttonc:before {
-  content: '\f12a';
+.nav-button2:before {
+  content: '\2630';
 }
 
 nav.sidebar {
