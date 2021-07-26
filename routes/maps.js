@@ -1,7 +1,7 @@
 /*
- * All routes for Widgets are defined here
- * Since this file is loaded in server.js into api/widgets,
- *   these routes are mounted onto /widgets
+ * All routes for maps are defined here
+ * Since this file is loaded in server.js into api/maps,
+ *   these routes are mounted onto /maps
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
@@ -76,7 +76,7 @@ module.exports = (db) => {
   //add map
   router.post("/:id", (req, res) => {
     const values = req.params.id;
-    db.query(`INSERT INTO maps (creator_id, area, name) VALUES ($1, $2, $3) RETURNING *`, [creator_id, area, name])
+    db.query(`INSERT INTO maps (creator_id, area, name) VALUES ($1, $2, $3) RETURNING *;`, [creator_id, area, name])
       .then(data => {
         const maps = data.rows[0];
         res
@@ -93,7 +93,7 @@ module.exports = (db) => {
   //delete map
   router.delete("/:id", (req, res) => {
     const values = req.params.id;
-    db.query(`DELETE FROM maps WHERE id = $1`, [values])
+    db.query(`DELETE FROM maps WHERE id = $1;`, [values])
       .then(data => {
         res.json({ success: true });
       })
