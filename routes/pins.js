@@ -71,5 +71,6 @@ module.exports = (db) => {
           .json({ success: false, error: err })
       })
   })
+
   return router;
 };
