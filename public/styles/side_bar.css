@@ -1,0 +1,36 @@
+.nav-button {
+  float: left;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: Ionicons;
+  z-index: 100;
+}
+
+.nav-button:hover {
+  color: red;
+}
+
+.nav-button:before {
+  content: '\f20d';
+}
+
+.nav-buttonc:before {
+  content: '\f12a';
+}
+
+nav.sidebar {
+  float: right;
+  color: pink;
+  background-color: rebeccapurple;
+  width: 18vw;
+  height: 100vh;
+  padding: 1vw;
+  margin-right: 0;
+  transition: 0.8 all;
+}
+
+nav.side {
+  margin-right: -18vw;
+  transition: 0.8 all;
+}
