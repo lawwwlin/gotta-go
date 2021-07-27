@@ -1,1 +1,7 @@
-const pins.id = L.marker([pins.location], draggable = false, title = pins.title)
+$(document).ready(function() {
+  function pinDeets(pinId) {
+    alert("pin clicked!")
+  }
+
+  marker.on('click', pinDeets(2))
+});
