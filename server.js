@@ -4,11 +4,17 @@ require('dotenv').config();
 // Web server config
 const PORT       = process.env.PORT || 8080;
 const ENV        = process.env.ENV || "development";
+var cookieSession= require('cookie-session');
 const express    = require("express");
 const bodyParser = require("body-parser");
 const sass       = require("node-sass-middleware");
 const app        = express();
 const morgan     = require('morgan');
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2'],
+}));
 
 // PG database client/connection setup
 const { Pool } = require('pg');
@@ -35,7 +41,7 @@ app.use(express.static("public"));
 // Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
 const mapsRoutes = require("./routes/maps");
-const pinsRoutes = require("./routes/pins")
+const pinsRoutes = require("./routes/pins");
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own

@@ -29,7 +29,7 @@ module.exports = (db) => {
     db.query(`SELECT * FROM maps WHERE maps.id = $1;`, [values])
       .then(data => {
         const maps = data.rows;
-        res.json({ maps }) // change to res.render("maps") later on
+        res.json({ maps })
       })
       .catch(err => {
         res.status(500)
@@ -74,9 +74,9 @@ module.exports = (db) => {
 
 
   //add map
-  router.post("/:id", (req, res) => {
-    const values = req.params.id;
-    db.query(`INSERT INTO maps (creator_id, area, name) VALUES ($1, $2, $3) RETURNING *;`, [creator_id, area, name])
+  router.post("/", (req, res) => {
+    const {creator_id, name, latitude, longitude} = req.body;
+    db.query(`INSERT INTO maps (creator_id, name, latitude, longitude) VALUES ($1, $2, $3, $4) RETURNING *;`, [creator_id, name, latitude, longitude])
       .then(data => {
         const maps = data.rows[0];
         res
@@ -88,7 +88,6 @@ module.exports = (db) => {
           .json({ error: err.message })
       })
   })
-
 
   //delete map
   router.delete("/:id", (req, res) => {

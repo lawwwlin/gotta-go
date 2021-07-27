@@ -2,8 +2,25 @@
 
 body {
   background-color: #EEE;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 
   h1 {
     color: #244751;
+  }
+
+  div.leaflet-popup-content {
+    background-color: orange;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  div.leaflet-popup-content img {
+    width: inherit;
+    height: auto;
   }
 }
