@@ -11,7 +11,7 @@ $(() => {
 
 
   //set to user location
-  //map.locate({ setView: true, maxZoom: 15 })
+  map.locate({ setView: true, maxZoom: 15 })
 
   //only works for buttons with class of "mapButtons"
   const elements = document.getElementsByClassName("mapButtons")
@@ -25,7 +25,6 @@ $(() => {
     $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
       const latitude = result.maps[0].latitude
       const longitude = result.maps[0].longitude
-      console.log(`latitude: ${latitude}, longitude: ${longitude}`)
       map.panTo([latitude, longitude], zoom);
     })
   })
