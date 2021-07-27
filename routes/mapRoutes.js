@@ -35,7 +35,22 @@ module.exports = (db) => {
         res.status(500)
           .json({ error: err.message })
       })
-  })
+  });
+
+  //retrieves maps near location
+  router.get("/:id", (req, res) => {
+    const { latitude, longitude } = req.body;
+    //distanceInKmBetweenEarthCoordinates(latitude, longitude,)
+    db.query(`SELECT latitude, longitude FROM maps WHERE latitude < ${latitude + 1} AND latitude > ${latitude - 1} = $1;`, [values])
+      .then(data => {
+        const maps = data.rows;
+        res.json({ maps })
+      })
+      .catch(err => {
+        res.status(500)
+          .json({ error: err.message })
+      })
+  });
 
   //get favourited maps
   router.get("/:id/favourited_maps", (req, res) => {
@@ -87,7 +102,7 @@ module.exports = (db) => {
           .status(500)
           .json({ error: err.message })
       })
-  })
+  });
 
   //delete map
   router.delete("/:id", (req, res) => {

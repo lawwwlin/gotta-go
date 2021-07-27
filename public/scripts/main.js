@@ -5,6 +5,20 @@ $(document).ready(function() {
       // console.log(user.username);
     }
 
+    // <header>user:</header>
+    // <div>
+    //   <h3>User maps</h3>
+    //   <div class='mapButtons'></div>
+    // </div>
+    const $userMaps = $(`<header>user not logged in</header>
+    <div>
+      <h3>User maps</h3>
+      <div class='mapButtons'></div>
+    </div>
+    `);
+
+    $userMaps.appendTo($('.sidebar'));
+
     let username, user_lat, user_long;
     // console.log('object is: ', obj);
     if (obj.user_id) {
@@ -16,6 +30,16 @@ $(document).ready(function() {
         username = obj.userData[0].username;
         user_lat = obj.userData[0].user_lat;
         user_long = obj.userData[0].user_long;
+
+        // <div class="favourites">
+        //   <h3>Favourited Maps</h3>
+        //   <ul>Map2</ul>
+        // </div>
+        // <footer>
+        //   <button>create map</button>
+        //   <button>create pin</button>
+        // </footer>
+
 
         $(".sidebar header").text(`user: ${username}`);
 
@@ -88,8 +112,12 @@ $(document).ready(function() {
 
         })
       });
+
       // user does not exist
     } else {
+      const $header = $('.sidebar h3');
+      $header.text('Nearby Maps');
+
       user_lat = 49.260833;
       user_long = -123.113889;
 
@@ -107,18 +135,56 @@ $(document).ready(function() {
       map.locate({ setView: true, maxZoom: 15 });
 
       //only works for buttons with class of "mapButtons"
-      const elements = document.getElementsByClassName("mapButtons")
+      // const elements = document.getElementsByClassName("mapButtons")
+
+      // //pans to map [x]'s coordinates
+      // $(elements).on('click', function () {
+      //   const zoom = 14;
+      //   const buttonID = (this.id);
+      //   console.log("ID = " + buttonID);
+
+      //   $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
+      //     const latitude = result.maps[0].latitude
+      //     const longitude = result.maps[0].longitude
+      //     map.panTo([latitude, longitude], zoom);
+      //   })
+      // })
+
+      // //declare variable as pins.id
+      // const pinId = L.marker([48.43037425991212, -123.34502630954228], draggable = false, title = 'Little June Cafe')
+
+      // pinId.addTo(map)
+
+      // // if pinId =
+
+      // $('map').on('dblclick', function () {
+
+      // })
+
+
+      const mapDiv = document.getElementsByClassName("mapButtons")
+      for (let i = 0; i < obj.userData.length; i++) {
+        const map_name = obj.userData[i].map_name;
+        const map_id = obj.userData[i].map_id;
+        const mapButton = $(`<button>${map_name}</button>`);
+        $(mapButton).attr('id', `${map_id}`);
+        mapButton.addClass('map-button');
+        // console.log('map button:', mapButton);
+        // console.log('map button id', mapButton.attr('id'));
+        mapButton.appendTo(mapDiv);
+      }
 
       //pans to map [x]'s coordinates
-      $(elements).on('click', function () {
+      $('.map-button').on('click', function () {
         const zoom = 14;
-        const buttonID = (this.id);
-        console.log("ID = " + buttonID);
+        const buttonID = $(this).attr('id');
+        console.log("button ID = " + buttonID);
 
         $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
-          const latitude = result.maps[0].latitude
-          const longitude = result.maps[0].longitude
-          map.panTo([latitude, longitude], zoom);
+          console.log('result', result);
+          const map_lat = result.maps[0].latitude;
+          const map_long = result.maps[0].longitude;
+          map.panTo([map_lat, map_long], zoom);
         })
       })
 
@@ -133,7 +199,5 @@ $(document).ready(function() {
 
       })
     }
-
-
   });
 });
