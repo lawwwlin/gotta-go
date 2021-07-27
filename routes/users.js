@@ -25,8 +25,6 @@ module.exports = (db) => {
       });
   });
 
-
-
   //retrieve user's maps
   router.get("/:id", (req, res) => {
     console.log('/api/users/' + req.params.id);
