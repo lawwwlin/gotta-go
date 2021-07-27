@@ -1,0 +1,44 @@
+.nav{
+  float:left;
+}
+
+.nav-button1 {
+  float: right;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  font-size: large;
+}
+
+.nav-button1:hover {
+  background-color: pink;
+}
+
+.nav-button1:before {
+  content: '✖';
+}
+
+.nav-button2:before {
+  content: '\2630';
+}
+
+.sidebar header {
+  text-align: right;
+}
+
+nav.sidebar {
+  float: right;
+  color: pink;
+  background-color: rebeccapurple;
+  width: 18vw;
+  height: 100vh;
+  padding: 1vw;
+  margin-right: 0;
+  transition: 0.8 all;
+}
+
+nav.side {
+  margin-right: -18vw;
+  transition: 0.8 all;
+}
