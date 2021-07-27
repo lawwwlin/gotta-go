@@ -9,7 +9,7 @@ module.exports = (db) => {
       .then(data => {
         const pins = data.rows;
         res
-          .json({ pins });
+            .json({ pins });
       })
       .catch(err => {
         res
