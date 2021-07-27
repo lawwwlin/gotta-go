@@ -13,6 +13,5 @@ $(document).ready(function() {
       $(".sidebar header").text(`user: ${obj.userData[0].username}`);
     });
   });
-
 });
 
