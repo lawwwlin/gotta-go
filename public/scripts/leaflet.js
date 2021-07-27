@@ -13,18 +13,27 @@ $(() => {
   //set to user location
   map.locate({ setView: true, maxZoom: 15 })
 
-  //pans to map 1's coordinates
+  //pans to map [x]'s coordinates
   const map1Button = document.getElementById('map1');
+  const map2Button = document.getElementById('map2');
+  const zoom = 14;
   map1Button.onclick = function () {
-    $.getJSON("http://localhost:8080/api/maps/64", function (result) {
+    $.getJSON("http://localhost:8080/api/maps/1", function (result) {
       const latitude = result.maps[0].latitude
       const longitude = result.maps[0].longitude
       console.log(`latitude: ${latitude}, longitude: ${longitude}`)
-      map.panTo([latitude, longitude])
-    });
+      map.panTo([latitude, longitude], zoom)
+    })
   }
 
-  /*    map.panTo([49.24966, -123.11934]) */
+  map2Button.onclick = function () {
+    $.getJSON("http://localhost:8080/api/maps/2", function (result) {
+      const latitude = result.maps[0].latitude
+      const longitude = result.maps[0].longitude
+      console.log(`latitude: ${latitude}, longitude: ${longitude}`)
+      map.panTo([latitude, longitude], zoom)
+    })
+  }
 
   //declare variable as pins.id
   const pinId = L.marker([48.43037425991212, -123.34502630954228], draggable = false, title = 'Little June Cafe')
