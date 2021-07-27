@@ -22,10 +22,6 @@ $(() => {
     const title = pin.title;
     const description = pin.description;
     marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${description}`);
-    // popup.setLatLng([pin.latitude, pin.longitude]).setContent(image, title, description)
-    // marker.on('click', function () {
-      // console.log(pin.title);
-    // });
   }
 
 
@@ -46,13 +42,6 @@ $(() => {
     }
   });
 
-
-/*   $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
-      const latitude = result.maps[0].latitude
-      const longitude = result.maps[0].longitude
-      map.panTo([latitude, longitude], zoom);
-    })
-  }) */
 
   //used to control loading of pins/handle lag
   map.on('load', function () {
@@ -85,8 +74,4 @@ $(() => {
       map.panTo([latitude, longitude], zoom);
     })
   })
-
-  // const pinId = L.marker([48.43037425991212, -123.34502630954228], draggable = false, title = 'Little June Cafe')
-
-  // pinId.addTo(map)
 });
