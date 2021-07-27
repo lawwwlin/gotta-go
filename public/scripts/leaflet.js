@@ -11,48 +11,36 @@ $(document).ready(function() {
     }).addTo(map);
 
 
-function makePin(pin) {
-  return L.marker([pin.latitude, pin.longitude], title = pin.title).addTo(map)
-}
-
-
-const mapLat = map.getCenter().lat
-const mapLng = map.getCenter().lng
-
-function radiusCheck(pin, rad) {
-  if (mapLat - rad <= pin.latitude && pin.latitude <= mapLat + rad) {
-    if (mapLng - rad <= pin.longitude && pin.longitude <= mapLng + rad){
-      return true;
+    function makePin(pin) {
+      return L.marker([pin.latitude, pin.longitude], title = pin.title).addTo(map)
     }
-  }
-}
 
-//show all pins
-// $.get('/api/pins', (obj) => {
-//   for (const pin of obj.pins) {
-//     makePin(pin);
-//   }
-// })
-
-//map.on('drag', {
-  $.get('/api/pins', (obj) => {
-    for (const pin of obj.pins) {
-      //if the pin is in a ~100km radius of the center of the map then it will load to the map
-      if (radiusCheck(pin, 0.6)) {
-        makePin(pin);
-      } else {
-        console.log('no pin in range')
+    function radiusCheck(pin, rad) {
+    const mapLng = map.getCenter().lng
+    const mapLat = map.getCenter().lat
+    if (mapLat - rad <= pin.latitude && pin.latitude <= mapLat + rad) {
+      if (mapLng - rad <= pin.longitude && pin.longitude <= mapLng + rad){
+        return true;
       }
     }
+  }
+
+  //used to control loading of pins/handle lag
+  map.on('load, moveend', function () {
+    $.get('/api/pins', (obj) => {
+      for (const pin of obj.pins) {
+        //if the pin is in a ~100km radius of the center of the map then it will load to the map
+        if (radiusCheck(pin, 0.5)) {
+          makePin(pin);
+        } else {
+          map.remove(pin);
+          console.log('no pin in range')
+        }
+      }
+    })
   })
-//})
 
-// pin.on('click', alert("wooooah"));
-console.log(arrOfPins);
-
-// if pinId =
-
-$('map').on('dblclick', function() {
+  $('map').on('dblclick', function() {
 
   })
 
