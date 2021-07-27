@@ -89,7 +89,6 @@ module.exports = (db) => {
       })
   })
 
-
   //delete map
   router.delete("/:id", (req, res) => {
     const values = req.params.id;

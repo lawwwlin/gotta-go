@@ -23,8 +23,6 @@ module.exports = (db) => {
       });
   });
 
-
-
   //retrieve user's maps
   router.get("/:id", (req, res) => {
     const values = req.params.id;
