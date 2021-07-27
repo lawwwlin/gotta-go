@@ -23,6 +23,10 @@
   content: '\2630';
 }
 
+.sidebar header {
+  text-align: right;
+}
+
 nav.sidebar {
   float: right;
   color: pink;
