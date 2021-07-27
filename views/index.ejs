@@ -7,16 +7,18 @@
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
   <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-  <link rel="stylesheet" href="/styles/map_selections.css" type="text/css" />
-  <link rel="stylesheet" href="/styles/world_map.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/side_bar.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/map.css" type="text/css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-  <script type="text/javascript" src="/scripts/leaflet.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
-<!--   <script type="text/javascript" src="/scripts/maps.js"></script> -->
+  <script type="text/javascript" src="/scripts/leaflet.js"></script>
+  <script type="text/javascript" src="/scripts/toggle-nav.js"></script>
+
 </head>
 
 <!-- <div>
@@ -25,19 +27,34 @@
 
 <div id="map"></div>
 <div id="map_selections">
-  <span class='chevron'><i class="fas fa-chevron-circle-right"></i></span>
-  <div>
-    <h3>Popular maps</h3>
-    <title>Maps</title>
-<!--     <ul>"Map 1"</ul> -->
-    <button id ='map1'> Map 1 </button>
-  </br>
-    <button id ='map2'> Map 2</button>
+  <div class='nav'>
+    <button class='nav-button1'></button>
+    <nav class="sidebar">
+      <header>user:</header>
+      <div>
+        <h3>Popular maps</h3>
+        <title>Maps</title>
+        <button id='1'> Map 1 </button>
+        </br>
+        <button id='2'> Map 2</button>
+        </br>
+        <button id='3'> Map 3</button>
+        </br>
+        <button id='4'> Map 4</button>
+        </br>
+        <button id='5'> Map 5</button>
+
+      </div>
+      <div class="favourites">
+        <h3>Favourited Maps</h3>
+        <ul>Map2</ul>
+      </div>
+      <footer>
+        <button>create map</button>
+        <button>create pin</button>
+      </footer>
+    </nav>
   </div>
-  <div class="favourites">
-    <h3>Favourited Maps</h3>
-    <ul>Map2</ul>
-  </div>
-  <div id="mapid"></div>
-</div>
+  </body>
+
 </html>
