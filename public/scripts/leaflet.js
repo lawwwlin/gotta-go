@@ -11,11 +11,14 @@ $(() => {
 
 
   //set to user location
-  map.locate({ setView: true, maxZoom: 15 })
+  //map.locate({ setView: true, maxZoom: 15 })
 
-  const zoom = 14;
+  //only works for buttons with class of "mapButtons"
+  const elements = document.getElementsByClassName("mapButtons")
+
   //pans to map [x]'s coordinates
-  $("button").on('click', function () {
+  $(elements).on('click', function () {
+    const zoom = 14;
     const buttonID = (this.id);
     console.log("ID = " + buttonID);
 
