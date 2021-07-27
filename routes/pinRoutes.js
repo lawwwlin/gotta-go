@@ -8,7 +8,7 @@ module.exports = (db) => {
       .then(data => {
         const pins = data.rows;
         res
-          .json({ pins });
+            .json({ pins });
       })
       .catch(err => {
         res
@@ -16,6 +16,22 @@ module.exports = (db) => {
           .json({ error: err.message });
       })
   })
+
+  router.get("/:id", (req, res) => {
+    const values = req.params.id;
+    db.query(`SELECT * FROM pins WHERE id = $1;`, [values])
+      .then(data => {
+        const pins = data.rows;
+        res
+          .json({ pins });
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message })
+      })
+  })
+
 
   //add pins
   router.post("/:id", (req, res) => {
