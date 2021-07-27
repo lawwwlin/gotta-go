@@ -11,10 +11,12 @@ const router = express.Router();
 module.exports = (db) => {
   //retrieve all users
   router.get("/", (req, res) => {
+    console.log('/api/users');
+    const user_id = req.session.user_id;
     db.query(`SELECT * FROM users;`)
       .then(data => {
         const users = data.rows;
-        res.json({ users });
+        res.json({ users, user_id });
       })
       .catch(err => {
         res
@@ -27,11 +29,12 @@ module.exports = (db) => {
 
   //retrieve user's maps
   router.get("/:id", (req, res) => {
-    const values = req.params.id;
-    db.query(`SELECT * FROM maps WHERE creator_id = $1;`, [values])
+    console.log('/api/users/' + req.params.id);
+    const user_id = req.params.id;
+    db.query(`SELECT users.*, maps.* FROM users JOIN maps ON creator_id = users.id WHERE creator_id = $1;`, [user_id])
       .then(data => {
-        const usersMaps = data.rows;
-        res.json(usersMaps)
+        const userData = data.rows;
+        res.json({userData});
       })
       .catch(err => {
         res
