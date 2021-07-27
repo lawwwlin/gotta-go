@@ -4,20 +4,33 @@ $(document).ready(function() {
     zoom: 13
   })
 
-L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
-  attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-  }).addTo(map);
+  console.log('map.center:', map.getCenter())
+
+  L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
+    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+    }).addTo(map);
 
 
-// const pinId = L.marker([48.43037425991212, -123.34502630954228], draggable = false, title = 'Little June Cafe')
-// pinId.addTo(map)
+function makePin(pin) {
+  return L.marker([pin.latitude, pin.longitude], title = pin.title).addTo(map)
+}
+//show all pins
+// $.get('/api/pins', (obj) => {
+//   for (const pin of obj.pins) {
+//     makePin(pin);
+//   }
+// })
 
-$.get('/api/pins', (obj) => {
-  for (const pin of obj.pins) {
-    L.marker([pin.latitude, pin.longitude], draggable = false, title = pin.title).addTo(map);
-  }
-})
+// $.get('/api/pins', (obj) => {
+//   for (const pin of obj.pins) {
+//     if (pin.latitude >= map.getCenter().lat +- 0.6 && pin.longitude >= pin.longitude + 0.6) {
+//       makePin(pin);
+//     }
+//   }
+// })
 
+// pin.on('click', alert("wooooah"));
+console.log(arrOfPins);
 
 // if pinId =
 
