@@ -7,12 +7,12 @@
 -- 	longitude FLOAT,
 -- 	province VARCHAR(50)
 -- );
- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (703, 'nulla elit ac', 48.8428574, -123.7044012, 'BC');
- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (139, 'pede ullamcorper augue a suscipit nulla elit ac nulla', 49.2815819, -122.7535881, 'BC');
- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (590, 'nonummy integer non velit donec diam neque', 54.39976, -126.67008, 'BC');
- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (428, 'auctor sed tristique in tempus sit amet', 49.08938, -123.08241, 'BC');
- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (612, 'mus etiam vel', 49.2574664, -123.0419607, 'BC');
- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (253, 'dui luctus', 49.05798, -122.25257, 'BC');
+--  insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (703, 'nulla elit ac', 48.8428574, -123.7044012, 'BC');
+--  insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (139, 'pede ullamcorper augue a suscipit nulla elit ac nulla', 49.2815819, -122.7535881, 'BC');
+--  insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (590, 'nonummy integer non velit donec diam neque', 54.39976, -126.67008, 'BC');
+--  insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (428, 'auctor sed tristique in tempus sit amet', 49.08938, -123.08241, 'BC');
+--  insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (612, 'mus etiam vel', 49.2574664, -123.0419607, 'BC');
+--  insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (253, 'dui luctus', 49.05798, -122.25257, 'BC');
 -- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (770, 'aenean lectus pellentesque eget nunc', 49.0965676, -117.71173, 'BC');
 -- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (378, 'ipsum primis in faucibus', 49.2227573, -122.6175451, 'BC');
 -- insert into MOCK_DATA (creator_id, name, latitude, longitude, province) values (941, 'eget congue eget semper rutrum nulla nunc purus', 49.08938, -123.08241, 'BC');
