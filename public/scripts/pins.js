@@ -1,10 +1,8 @@
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  user: 'labber',
-  password: 'labber',
-  host: 'localhost',
-  database: 'db'
+$(document).ready(function() {
+  $.get('/api/pins', (obj) => {
+    console.log('obj:', obj);
+    for (const pin of obj.pins) {
+      const pin[pin.id] = new L.marker([pin.latitude, pin.longitude], draggable = false, title = pin.title).addTo(map);
+    }
+  })
 });
-
-const pins.id = L.marker([pins.location], draggable = false, title = pins.title)
