@@ -38,10 +38,14 @@ module.exports = (db) => {
   });
 
   //retrieves maps near location
-  router.get("/:id", (req, res) => {
-    const { latitude, longitude } = req.body;
-    //distanceInKmBetweenEarthCoordinates(latitude, longitude,)
-    db.query(`SELECT latitude, longitude FROM maps WHERE latitude < ${latitude + 1} AND latitude > ${latitude - 1} = $1;`, [values])
+  router.get("/:lat/:long", (req, res) => {
+    const { lat, long } = req.body;
+    db.query(`SELECT latitude, longitude FROM maps
+      WHERE latitude < ${lat + 1}
+      AND latitude > ${lat - 1}
+      AND longitude < ${long + 1}
+      AND longitude > ${long - 1}
+      ;`)
       .then(data => {
         const maps = data.rows;
         res.json({ maps })
