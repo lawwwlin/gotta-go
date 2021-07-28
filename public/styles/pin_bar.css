@@ -1,9 +1,9 @@
-.pin_details{
+div#pin_details{
   float:left;
 }
 
-.nav-button1 {
-  /* float: right; */
+.toggle_button {
+  float: right;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -11,26 +11,26 @@
   font-size: large;
 }
 
-.nav-button1:hover {
+.toggle_button1:hover {
   background-color: pink;
 }
 
-.nav-button1:before {
+.toggle_open {
   content: '✖';
 }
 
-.nav-button2:before {
+.toggle_close {
   content: '\2630';
 }
 
 .sidebar header {
-  text-align: right;
+  text-align: left;
 }
 
-nav.sidebar {
-  float: right;
+nav.pin_bar {
+  float: left;
   color: pink;
-  background-color: rebeccapurple;
+  background-color: orange;
   width: 18vw;
   height: 100vh;
   padding: 1vw;
@@ -39,6 +39,6 @@ nav.sidebar {
 }
 
 nav.side {
-  margin-right: -18vw;
-  transition: 0.8 all;
+  /* margin-right: -18vw; */
+  /* transition: 0.8 all; */
 }

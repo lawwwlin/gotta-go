@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
     <link rel="stylesheet" href="/styles/side_bar.css" type="text/css" />
     <link rel="stylesheet" href="/styles/map.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/pin_bar.css" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
@@ -55,23 +56,19 @@
       </footer>
     </nav>
   </div>
+</div>
 
-  <div id="pin_details" hidden>
-    <div>
-      <button class='nav-button1'></button>
-      <nav class="sidebar">
-        <header class="pin_title">user:</header>
-        <div class="description">
-        <img src= >
-        <p class="write_up"></p>
-        </div>
-        <div class="pin_buttons">
-          <button></button>
-          <button></button>
-        </div>
+  <div id="pin_details">
+    <button class='toggle_button'></button>
+    <nav class="pin_bar"></nav>
+      <header class="pin_title">user:</header>
+      <div class="description">
+      <img class="image" src= >
+      <p class="write_up"></p>
         <footer>
-          <button>create map</button>
-          <button>create pin</button>
+          <button>edit pin</button>
+          <button>report pin</button>
+          <button class="add_to_map" hidden>add pin to map</button>
         </footer>
       </nav>
     </div>
