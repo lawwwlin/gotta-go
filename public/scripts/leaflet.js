@@ -216,18 +216,17 @@ $(() => {
             <input type="hidden" name="creator_id" value="${user_id}" />
 
             <label for="name">Map name:</label><br><br>
-            <input type="text" name="name" id="name" value="Map Name3" /><br><br>
+            <input type="text" name="name" id="name" placeholder="Map Name3" /><br><br>
 
             <label for="latitude">Latitude:</label><br><br>
-            <input type="text" name="latitude" id="latitude" value="48.2827" /><br><br>
+            <input type="text" name="latitude" id="latitude" placeholder="48.2827" /><br><br>
 
             <label for="longitude">Longitude:</label><br><br>
-            <input type="text" name="longitude" id="longitude" value="-124.1207" /><br><br>
+            <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
             <button type="submit">submit</button>
           </form> `);
 
         $('.sidebar footer').on('click', function () {
-          console.log('create button clicked', $createButton);
           const $sidebar = $('.sidebar');
           $sidebar.empty();
           $form.appendTo($sidebar);
@@ -235,10 +234,7 @@ $(() => {
 
         $form.submit((event) => {
           event.preventDefault();
-          console.log('form submitted form:', $form)
           const data = $form.serialize();
-          console.log('form submitted data:', data)
-
           $.post(`/api/maps/`, data)
             .then(() => {
               console.log(data);
