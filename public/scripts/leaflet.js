@@ -211,10 +211,26 @@ $(() => {
           for (let i = 0; i < obj.length; i++) {
             const map = obj[i].map_id
             console.log(`map: ${map}`)
-            const faveMapButton = $(`<div><button>${map}</button></div>`);
-            faveMapButton.addClass('map-button');
-            faveMapButton.appendTo(mapDiv);
+            const $faveMapButton = $(`<div><button>${map}</button></div>`);
+            $($faveMapButton).attr('id', `${map}`);
+            $faveMapButton.addClass('map-button');
+            $faveMapButton.appendTo(mapDiv);
+
           }
+          $('.map-button').on('click', function () {
+            const zoom = 14;
+            const buttonID = $(this).attr('id');
+            console.log("button ID = " + buttonID);
+
+            $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
+              //console.log('result', result);
+              const map_id = result.maps[0].id;
+              const map_lat = result.maps[0].latitude;
+              const map_long = result.maps[0].longitude;
+              map.panTo([map_lat, map_long], zoom);
+          })
+        })
+
         })
 
         //create map button
