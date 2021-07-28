@@ -42,6 +42,17 @@ As a site visitor, I can view other people's maps, because they shared them with
 As a site visitor, I save maps to my favourites tab, because the data is stored in the site cookies
 
 -------------------------------------------------------------------
+### Stretch Ideas
+ ## Short
+  - Add new columns to bathroom pins
+    - handicap accessible BOOLEAN
+    - gender-inclusive BOOLEAN
+    - Maybe an integer that represents exclusive facilities (urinals), toilets that aren't gender inclusive, and then gender inclusive toilets.  0, 1, 2??
+    - customers-only BOOLEAN
+  - Represent these with icons on the pin_bar
+  - Change icons on the map to this lol https://fontawesome.com/v5.15/icons/toilet?style=solid
+
+-------------------------------------------------------------------
 
 ## ERD
 
