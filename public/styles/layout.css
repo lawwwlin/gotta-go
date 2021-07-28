@@ -20,5 +20,5 @@ body div.leaflet-popup-content {
 
 body div.leaflet-popup-content img {
   width: inherit;
-  height: auto;
+  height: inherit;
 }
