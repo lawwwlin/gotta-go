@@ -29,7 +29,26 @@ module.exports = (db) => {
   router.get("/:id", (req, res) => {
     console.log('/api/users/' + req.params.id);
     const user_id = req.params.id;
-    db.query(`SELECT users.*, maps.* FROM users JOIN maps ON creator_id = users.id WHERE creator_id = $1;`, [user_id])
+    db.query(`SELECT users.id as user_id, username, password, users.latitude as user_lat, users.longitude as user_long, maps.id as map_id, creator_id, name as map_name, maps.latitude as map_lat, maps.longitude as map_long FROM users JOIN maps ON creator_id = users.id WHERE creator_id = $1;`, [user_id])
+      .then(data => {
+        const userData = data.rows;
+        res.json({userData});
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
+  //edit user's location
+  router.patch("/:id", (req, res) => {
+    console.log('/api/users/' + req.params.id);
+    const user_id = req.params.id;
+    const { latitude, longitude } = req.body;
+    console.log('req.bod', req.body);
+    console.log('patch, lat:', latitude, 'long:', longitude);
+    db.query(`UPDATE users SET latitude = $1, longitude = $2 WHERE id = $3 RETURNING *;`, [latitude, longitude, user_id])
       .then(data => {
         const userData = data.rows;
         res.json({userData});

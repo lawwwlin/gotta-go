@@ -11,6 +11,7 @@ const router = express.Router();
 module.exports = (db) => {
   //retrieves all maps in database
   router.get("/", (req, res) => {
+    console.log('/api/maps');
     db.query(`SELECT * FROM maps;`)
       .then(data => {
         const maps = data.rows;
@@ -26,6 +27,7 @@ module.exports = (db) => {
   //retrieves single map via map id
   router.get("/:id", (req, res) => {
     const values = req.params.id;
+    console.log('/api/maps/' + values);
     db.query(`SELECT * FROM maps WHERE maps.id = $1;`, [values])
       .then(data => {
         const maps = data.rows;
@@ -35,7 +37,29 @@ module.exports = (db) => {
         res.status(500)
           .json({ error: err.message })
       })
-  })
+  });
+
+  //retrieves maps near location
+  router.get("/:lat/:long", (req, res) => {
+    const { lat, long } = req.params;
+    console.log(`/api/maps/${lat}/${long}`);
+    const userLat = parseFloat(lat);
+    const userLong = parseFloat(long);
+    db.query(`SELECT * FROM maps
+      WHERE latitude < ${userLat + 1}
+      AND latitude > ${userLat - 1}
+      AND longitude < ${userLong + 1}
+      AND longitude > ${userLong - 1}
+      ;`)
+      .then(data => {
+        const maps = data.rows;
+        res.json({ maps })
+      })
+      .catch(err => {
+        res.status(500)
+          .json({ error: err.message })
+      })
+  });
 
   //get favourited maps
   router.get("/:id/favourited_maps", (req, res) => {
@@ -76,6 +100,7 @@ module.exports = (db) => {
   //add map
   router.post("/", (req, res) => {
     const {creator_id, name, latitude, longitude} = req.body;
+    console.log('post /api/maps req.body:', req.body);
     db.query(`INSERT INTO maps (creator_id, name, latitude, longitude) VALUES ($1, $2, $3, $4) RETURNING *;`, [creator_id, name, latitude, longitude])
       .then(data => {
         const maps = data.rows[0];
@@ -87,7 +112,7 @@ module.exports = (db) => {
           .status(500)
           .json({ error: err.message })
       })
-  })
+  });
 
   //delete map
   router.delete("/:id", (req, res) => {

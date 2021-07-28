@@ -3,6 +3,7 @@ const router = express.Router();
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
+    console.log('/api/pins');
     const values = req.params.id;
     db.query(`SELECT * FROM pins;`)
       .then(data => {
@@ -19,6 +20,7 @@ module.exports = (db) => {
 
   router.get("/:id", (req, res) => {
     const values = req.params.id;
+    console.log('/api/pins/' + values);
     db.query(`SELECT * FROM pins WHERE id = $1;`, [values])
       .then(data => {
         const pins = data.rows;
