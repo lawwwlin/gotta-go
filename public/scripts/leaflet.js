@@ -14,15 +14,35 @@ $(() => {
 
   //const map1 = L.layerGroup([])
 
-  //create marker for map
-  console.log('leaflet.js');
   function makePin(pin) {
     const marker = L.marker([pin.latitude, pin.longitude])
-    marker.addTo(map)
     const image = `<img src="${pin.image_url}">`
     const title = pin.title;
     const description = pin.description;
     marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${description}`);
+    marker.on('click', function() {
+      const $title = $('<header>', {'class': 'pin_title'}).text(pin.title);
+      const $img = $('<img>', {'class': 'image'}).attr('src', pin.image_url);
+      const $description = $('<p>', { 'class': 'write_up'}).text(pin.description);
+      const $descriptionDiv = $('<div>', { 'class': 'description'});
+      const $nav = $('<nav>', {'class': 'pin_bar'})
+      const $footer = $('<footer>')
+      const $editButton = $('button', {'class': 'edit_pin'}).text('edit pin')
+      const $addButton = $('button', {'class': 'add_pin'}).attr('hidden', true).text('report pin')
+
+      $descriptionDiv.append($img, $description);
+      $footer.append($editButton, $addButton);
+      $nav.append($title, $descriptionDiv, $footer);
+
+      $('div#pin_details').empty();
+      $('div#pin_details').append($nav);
+    })
+    return marker;
+  }
+
+  const renderPinDeets = function() {
+    $('nav.pin_bar').empty();
+    $
   }
 
 
@@ -39,7 +59,7 @@ $(() => {
 
   $.get('/api/pins', (obj) => {
     for (const pin of obj.pins) {
-     makePin(pin)
+     makePin(pin).addTo(map)
     }
   });
 

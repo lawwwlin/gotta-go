@@ -1,5 +1,5 @@
 -- -- fake data from https://www.mockaroo.com/
--- DROP TABLE IF EXISTS MOCK_DATA CASCADE;
+DROP TABLE IF EXISTS MOCK_DATA CASCADE;
 -- create table MOCK_DATA (
 -- 	creator_id INT,
 -- 	title VARCHAR(255),
