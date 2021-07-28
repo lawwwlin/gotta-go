@@ -33,8 +33,8 @@ $(() => {
       $descriptionDiv.append($img, $description);
       $footer.append($rateButton, $editButton, $addButton);
       $nav.append($title, $descriptionDiv, $footer);
-      $('div#pin_details').empty();
-      $('div#pin_details').append($nav);
+      $('div.pin_container').empty();
+      $('div.pin_container').append($nav);
     })
     return marker;
   }
