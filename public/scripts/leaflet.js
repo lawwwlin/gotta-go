@@ -21,19 +21,18 @@ $(() => {
     const description = pin.description;
     marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${description}`);
     marker.on('click', function() {
-      const $title = $('<header>', {'class': 'pin_title'}).text(pin.title);
+      const $title = $('<header>', {'class': 'pin_title'}).text(title);
       const $img = $('<img>', {'class': 'image'}).attr('src', pin.image_url);
-      const $description = $('<p>', { 'class': 'write_up'}).text(pin.description);
+      const $description = $('<p>', { 'class': 'write_up'}).text(description);
       const $descriptionDiv = $('<div>', { 'class': 'description'});
-      const $nav = $('<nav>', {'class': 'pin_bar'})
-      const $footer = $('<footer>')
-      const $editButton = $('button', {'class': 'edit_pin'}).text('edit pin')
-      const $addButton = $('button', {'class': 'add_pin'}).attr('hidden', true).text('report pin')
-
+      const $nav = $('<nav>', {'class': 'pin_bar'});
+      const $footer = $('<footer>');
+      const $rateButton = $('<button>', {'class': 'edit_pin'}).text('Rate Bathroom');
+      const $editButton = $('<button>', {'class': 'edit_pin'}).text('edit pin').attr('hidden', true);
+      const $addButton = $('<button>', {'class': 'add_pin'}).attr('hidden', true).text('report pin');
       $descriptionDiv.append($img, $description);
-      $footer.append($editButton, $addButton);
+      $footer.append($rateButton, $editButton, $addButton);
       $nav.append($title, $descriptionDiv, $footer);
-
       $('div#pin_details').empty();
       $('div#pin_details').append($nav);
     })

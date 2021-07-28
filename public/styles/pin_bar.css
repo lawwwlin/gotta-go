@@ -11,6 +11,12 @@ div#pin_details{
   font-size: large;
 }
 
+img.image {
+  width: 28vw;
+  height: auto;
+  padding: 0.05vw;
+}
+
 .toggle_button1:hover {
   background-color: pink;
 }
@@ -29,16 +35,17 @@ div#pin_details{
 
 nav.pin_bar {
   float: left;
-  color: pink;
+  color: whitesmoke;
   background-color: orange;
-  width: 18vw;
+  width: 30vw;
   height: 100vh;
   padding: 1vw;
   margin-right: 0;
   transition: 0.8 all;
+  overflow: auto;
 }
 
-nav.side {
-  /* margin-right: -18vw; */
-  /* transition: 0.8 all; */
+nav.left_side {
+  margin-right: -18vw;
+  transition: 0.8 all;
 }
