@@ -133,16 +133,6 @@ $(() => {
 
         $.get(`/api/users/`, (obj) => { });
 
-        // <div class="favourites">
-        //   <h3>Favourited Maps</h3>
-        //   <ul>Map2</ul>
-        // </div>
-        // <footer>
-        //   <button>create map</button>
-        //   <button>create pin</button>
-        // </footer>
-
-
         $(".sidebar header").text(`user: ${username}`);
         const $createButton = $('<footer><button>create map</button></footer>');
         $createButton.appendTo($('.sidebar'));
@@ -181,8 +171,6 @@ $(() => {
           const $mapButton = $(`<div><button>${map_name}</button></div>`);
           $($mapButton).attr('id', `${map_id}`);
           $mapButton.addClass('map-button');
-          // console.log('map button:', mapButton);
-          // console.log('map button id', mapButton.attr('id'));
           $mapButton.appendTo(mapDiv);
         }
 
@@ -193,7 +181,7 @@ $(() => {
           console.log("button ID = " + buttonID);
 
           $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
-            console.log('result', result);
+            //console.log('result', result);
             const map_id = result.maps[0].id;
             const map_lat = result.maps[0].latitude;
             const map_long = result.maps[0].longitude;
@@ -201,8 +189,9 @@ $(() => {
             const $sidebar = $('.sidebar');
             $sidebar.empty();
 
+            //get map pins
             $.get(`/api/mapPins/${map_id}`, (obj) => {
-              console.log(`get map-pins: ${obj}`)
+              // console.log(`get map-pins: ${obj}`)
               for (let i = 0; i < obj.length; i++) {
                 const pin_id = obj[i].pin_id;
                 const pinButton = $(`<div><button>${pin_id}</button></div>`);
@@ -213,6 +202,22 @@ $(() => {
           })
         })
 
+        //favourite map buttons
+        $.get(`/api/faveMaps/${user_id}`, (obj) => {
+          const $faveMapNav = $(`</br>
+            <h3> Favourite Maps </h3>
+          `)
+          $faveMapNav.appendTo(mapDiv)
+          for (let i = 0; i < obj.length; i++) {
+            const map = obj[i].map_id
+            console.log(`map: ${map}`)
+            const faveMapButton = $(`<div><button>${map}</button></div>`);
+            faveMapButton.addClass('map-button');
+            faveMapButton.appendTo(mapDiv);
+          }
+        })
+
+        //create map button
         const $form = $(`<form>
             <input type="hidden" name="creator_id" value="${user_id}" />
 
