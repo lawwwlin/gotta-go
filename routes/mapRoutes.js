@@ -45,12 +45,15 @@ module.exports = (db) => {
     console.log(`/api/maps/${lat}/${long}`);
     const userLat = parseFloat(lat);
     const userLong = parseFloat(long);
-    db.query(`SELECT * FROM maps
+    db.query(`SELECT *,  SQRT(POW(69.1 * (latitude::float -  ${userLat}::float), 2) +
+    POW(69.1 * (${userLong}::float - longitude::float) * COS(latitude::float / 57.3), 2)) as distance
+      FROM maps
       WHERE latitude < ${userLat + 1}
       AND latitude > ${userLat - 1}
       AND longitude < ${userLong + 1}
       AND longitude > ${userLong - 1}
-      ;`)
+      ORDER BY distance;`)
+
       .then(data => {
         const maps = data.rows;
         res.json({ maps })
@@ -99,7 +102,7 @@ module.exports = (db) => {
 
   //add map
   router.post("/", (req, res) => {
-    const {creator_id, name, latitude, longitude} = req.body;
+    const { creator_id, name, latitude, longitude } = req.body;
     console.log('post /api/maps req.body:', req.body);
     db.query(`INSERT INTO maps (creator_id, name, latitude, longitude) VALUES ($1, $2, $3, $4) RETURNING *;`, [creator_id, name, latitude, longitude])
       .then(data => {

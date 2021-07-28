@@ -10,7 +10,7 @@ $(() => {
 
   L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-    }).addTo(map);
+  }).addTo(map);
 
   //const map1 = L.layerGroup([])
 
@@ -20,15 +20,15 @@ $(() => {
     const title = pin.title;
     const description = pin.description;
     marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${description}`);
-    marker.on('click', function() {
-      const $title = $('<header>', {'class': 'pin_title'}).text(pin.title);
-      const $img = $('<img>', {'class': 'image'}).attr('src', pin.image_url);
-      const $description = $('<p>', { 'class': 'write_up'}).text(pin.description);
-      const $descriptionDiv = $('<div>', { 'class': 'description'});
-      const $nav = $('<nav>', {'class': 'pin_bar'})
+    marker.on('click', function () {
+      const $title = $('<header>', { 'class': 'pin_title' }).text(pin.title);
+      const $img = $('<img>', { 'class': 'image' }).attr('src', pin.image_url);
+      const $description = $('<p>', { 'class': 'write_up' }).text(pin.description);
+      const $descriptionDiv = $('<div>', { 'class': 'description' });
+      const $nav = $('<nav>', { 'class': 'pin_bar' })
       const $footer = $('<footer>')
-      const $editButton = $('button', {'class': 'edit_pin'}).text('edit pin')
-      const $addButton = $('button', {'class': 'add_pin'}).attr('hidden', true).text('report pin')
+      const $editButton = $('button', { 'class': 'edit_pin' }).text('edit pin')
+      const $addButton = $('button', { 'class': 'add_pin' }).attr('hidden', true).text('report pin')
 
       $descriptionDiv.append($img, $description);
       $footer.append($editButton, $addButton);
@@ -40,7 +40,7 @@ $(() => {
     return marker;
   }
 
-  const renderPinDeets = function() {
+  const renderPinDeets = function () {
     $('nav.pin_bar').empty();
     $
   }
@@ -48,10 +48,10 @@ $(() => {
 
   //only load pins within radius
   function radiusCheck(pin, rad) {
-  const mapLng = map.getCenter().lng
-  const mapLat = map.getCenter().lat
-  if (mapLat - rad <= pin.latitude && pin.latitude <= mapLat + rad) {
-    if (mapLng - rad <= pin.longitude && pin.longitude <= mapLng + rad){
+    const mapLng = map.getCenter().lng
+    const mapLat = map.getCenter().lat
+    if (mapLat - rad <= pin.latitude && pin.latitude <= mapLat + rad) {
+      if (mapLng - rad <= pin.longitude && pin.longitude <= mapLng + rad) {
         return true;
       }
     }
@@ -59,7 +59,7 @@ $(() => {
 
   $.get('/api/pins', (obj) => {
     for (const pin of obj.pins) {
-     makePin(pin).addTo(map)
+      makePin(pin).addTo(map)
     }
   });
 
@@ -96,16 +96,7 @@ $(() => {
     })
   })
 
-
-
-
-
-
-
-
-
-
-
+  //################################################################## maps stuff ###################################################################
 
   $.get('/api/users', (obj) => {
     // console.log('side-bar.js', obj);
@@ -128,7 +119,6 @@ $(() => {
     $userMaps.appendTo($('.sidebar'));
 
 
-
     let username, user_lat, user_long;
     // console.log('object is: ', obj);
     if (obj.user_id) {
@@ -141,7 +131,7 @@ $(() => {
         user_lat = obj.userData[0].user_lat;
         user_long = obj.userData[0].user_long;
 
-        $.get(`/api/users/`, (obj) => {});
+        $.get(`/api/users/`, (obj) => { });
 
         // <div class="favourites">
         //   <h3>Favourited Maps</h3>
@@ -158,37 +148,29 @@ $(() => {
         $createButton.appendTo($('.sidebar'));
         console.log('create button', $createButton);
 
-
-
-        // const map = L.map('map', {
-        //   center: [user_lat, user_long], //set this to user location
-        //   zoom: 13
-        // });
-
-        // L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
-        //   attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-        // }).addTo(map);
-
-
         // get user location
-        map.locate({ setView: true, maxZoom: 15 });
+        map.locate({ setView: true, maxZoom: 15 })
+          .on('locationfound', function (e) {
+            user_lat = e.latitude;
+            user_long = e.longitude;
+            console.log(`user lat: ${user_lat}, user long:${user_long}`)
 
-        // patch user location in the database
-        $.ajax({
-          url : `http://localhost:8080/api/users/${user_id}`,
-          type : 'PATCH',
-          data : {latitude: user_lat, longitude: user_long},
-          success : function() {
-              console.log("user location Successfully Patched!");
-          },
-          error : function(jqXHR, textStatus, errorThrown) {
-              // log the error to the console
-              console.log("The following error occured: " + textStatus, errorThrown);
-          },
-          complete : function() {
-              console.log("Patching completed");
-          }
-        });
+            $.ajax({
+              url: `http://localhost:8080/api/users/${user_id}`,
+              type: 'PATCH',
+              data: { latitude: user_lat, longitude: user_long },
+              success: function () {
+                console.log(`user location Successfully Patched! user lat: ${user_lat}, user long:${user_long}`);
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                // log the error to the console
+                console.log("The following error occured: " + textStatus, errorThrown);
+              },
+              complete: function () {
+                console.log("Patching completed");
+              }
+            })
+          });
 
         //only works for buttons with class of "mapButtons"
         const mapDiv = document.getElementsByClassName("mapButtons")
@@ -205,7 +187,7 @@ $(() => {
         }
 
         //pans to map [x]'s coordinates
-        $('.map-button').on('click', function() {
+        $('.map-button').on('click', function () {
           const zoom = 14;
           const buttonID = $(this).attr('id');
           console.log("button ID = " + buttonID);
@@ -215,6 +197,18 @@ $(() => {
             const map_lat = result.maps[0].latitude;
             const map_long = result.maps[0].longitude;
             map.panTo([map_lat, map_long], zoom);
+          })
+          const $sidebar = $('.sidebar');
+          $sidebar.empty();
+
+          $.get(`/api/mapPins`, (obj) => {
+            console.log(`get map-pins: ${obj}`)
+            for (let i = 0; i < obj.length; i++) {
+              const pin_id = obj[i].pin_id;
+              const pinButton = $(`<div><button>${pin_id}</button></div>`);
+              $(pinButton).attr('id', `${pin_id}`);
+              pinButton.appendTo($('.sidebar'));
+            }
           })
         })
 
@@ -232,14 +226,14 @@ $(() => {
             <button type="submit">submit</button>
           </form> `);
 
-        $('.sidebar footer').on('click', function() {
+        $('.sidebar footer').on('click', function () {
           console.log('create button clicked', $createButton);
           const $sidebar = $('.sidebar');
           $sidebar.empty();
           $form.appendTo($sidebar);
         });
 
-        $form.submit( (event) => {
+        $form.submit((event) => {
           event.preventDefault();
           console.log('form submitted form:', $form)
           const data = $form.serialize();
@@ -264,22 +258,12 @@ $(() => {
       user_lat = 49.260833;
       user_long = 123.113889;
 
-      // const map = L.map('map', {
-      //   center: [user_lat, user_long], //set this to user location
-      //   zoom: 13
-      // });
-
-      // L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
-      //   attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-      // }).addTo(map);
-
-
       //set map to user location
       map.locate({ setView: true, maxZoom: 15 })
-        .on('locationfound', function(e) {
+        .on('locationfound', function (e) {
           user_lat = e.latitude;
           user_long = e.longitude;
-          console.log('updated user location: lat:', user_lat, 'long:', user_long )
+          console.log('updated user location: lat:', user_lat, 'long:', user_long)
           const radius = e.accuracy / 2;
           const myIcon = L.icon({
             iconUrl: 'https://assets.stickpng.com/images/580b57fcd9996e24bc43c39c.png',
@@ -287,14 +271,14 @@ $(() => {
             iconAnchor: [20, 20],
             popupAnchor: [0, -15]
           });
-          const marker = L.marker(e.latlng, {icon: myIcon}).addTo(map);
+          const marker = L.marker(e.latlng, { icon: myIcon }).addTo(map);
           const popup = L.popup().setContent(`<h3>You are within ${radius} meters from this point</h3>`);
           marker.bindPopup(popup).openPopup();
           L.circle(e.latlng, radius).addTo(map);
 
           $.get(`/api/maps/${user_lat}/${user_long}`, (obj) => {
 
-            console.log('map obj according to location',obj.maps);
+            console.log('map obj according to location', obj.maps);
             const mapDiv = $('.mapButtons')
             mapDiv.empty();
             for (let i = 0; i < obj.maps.length; i++) {
@@ -303,8 +287,6 @@ $(() => {
               const mapButton = $(`<div><button>${map_name}</button></div>`);
               $(mapButton).attr('id', `${map_id}`);
               mapButton.addClass('map-button');
-              // console.log('map button:', mapButton);
-              // console.log('map button id', mapButton.attr('id'));
               mapButton.appendTo(mapDiv);
             }
 
@@ -323,16 +305,6 @@ $(() => {
             })
           });
         });
-
-
-      // $('.continue-button').on('click', function(e) {
-      //   e.preventDefault();
-      //   console.log('not logging in clicked');
-      //   window.location = `http://localhost:8080/api/maps/${user_lat}/${user_long}`;
-      // });
-
-
-
     }
-    });
+  });
 });
