@@ -3,9 +3,10 @@ const router = express.Router();
 
 module.exports = (db) => {
   //retrieves all maps in database
-  router.get("/", (req, res) => {
+  router.get("/:id", (req, res) => {
     //    console.log('/api/mapPins');
-    db.query(`SELECT * FROM map_pins;`)
+    const map_id = req.params.id;
+    db.query(`SELECT * FROM map_pins WHERE map_id = $1;`, [map_id])
       .then(data => {
         const mapPins = data.rows;
         console.log(mapPins)

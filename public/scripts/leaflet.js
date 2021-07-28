@@ -194,21 +194,22 @@ $(() => {
 
           $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
             console.log('result', result);
+            const map_id = result.maps[0].id;
             const map_lat = result.maps[0].latitude;
             const map_long = result.maps[0].longitude;
             map.panTo([map_lat, map_long], zoom);
-          })
-          const $sidebar = $('.sidebar');
-          $sidebar.empty();
+            const $sidebar = $('.sidebar');
+            $sidebar.empty();
 
-          $.get(`/api/mapPins`, (obj) => {
-            console.log(`get map-pins: ${obj}`)
-            for (let i = 0; i < obj.length; i++) {
-              const pin_id = obj[i].pin_id;
-              const pinButton = $(`<div><button>${pin_id}</button></div>`);
-              $(pinButton).attr('id', `${pin_id}`);
-              pinButton.appendTo($('.sidebar'));
-            }
+            $.get(`/api/mapPins/${map_id}`, (obj) => {
+              console.log(`get map-pins: ${obj}`)
+              for (let i = 0; i < obj.length; i++) {
+                const pin_id = obj[i].pin_id;
+                const pinButton = $(`<div><button>${pin_id}</button></div>`);
+                $(pinButton).attr('id', `${pin_id}`);
+                pinButton.appendTo($('.sidebar'));
+              }
+            })
           })
         })
 
