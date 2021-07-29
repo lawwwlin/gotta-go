@@ -1,4 +1,7 @@
 // ***** TODO: make onclick function for pins
+//             show distance away from the user for nearby maps
+//             rating system
+//             pins side bar
 
 
 // define a default user location at Vancouver
