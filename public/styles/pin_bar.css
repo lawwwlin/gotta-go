@@ -1,44 +1,58 @@
-div#pin_details{
+div.pin_details{
   float:left;
 }
 
-.toggle_button {
+button.toggle_button {
   float: right;
   background-color: transparent;
+  color: black;
   border: none;
   cursor: pointer;
   z-index: 100;
   font-size: large;
 }
 
-.toggle_button1:hover {
+img.image {
+  width: 28vw;
+  height: auto;
+  padding: 0.05vw;
+}
+
+.toggle_button:hover {
   background-color: pink;
+}
+
+.toggle_button:before {
+  content: '✖'
 }
 
 .toggle_open {
   content: '✖';
 }
 
-.toggle_close {
+.toggle_close:before {
   content: '\2630';
+  display: flex;
+  align-items: center;
 }
 
 .sidebar header {
   text-align: left;
 }
 
-nav.pin_bar {
+div.pin_container {
   float: left;
-  color: pink;
+  color: whitesmoke;
   background-color: orange;
-  width: 18vw;
+  width: 30vw;
   height: 100vh;
   padding: 1vw;
   margin-right: 0;
   transition: 0.8 all;
+  overflow: auto;
 }
 
-nav.side {
-  /* margin-right: -18vw; */
-  /* transition: 0.8 all; */
+.left_side {
+  margin-left: -30vw;
+  transition: 0.8 all;
 }
