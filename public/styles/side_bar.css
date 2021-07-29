@@ -5,7 +5,7 @@
 
 .nav-button1 {
   float: left;
-  background-color: transparent;
+  background-color: rgb(91, 171, 236);
   border: none;
   cursor: pointer;
   z-index: 100;
@@ -13,7 +13,7 @@
 }
 
 .nav-button1:hover {
-  background-color: pink;
+  background-color: rgb(106, 149, 214);
 }
 
 .nav-button1:before {
@@ -28,11 +28,11 @@
   text-align: right;
 }
 
-nav.sidebar {
+nav.left-nav {
   float: right;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: white;
-  background-color: #013220;
+  background-color: rgb(91, 171, 236);
+  background-image: url("/images/graphy.png");
   width: 18vw;
   height: 100vh;
   padding: 1.3em;
@@ -46,7 +46,7 @@ nav.side {
 }
 
 /* Sidebar Content Styling */
-.sidebar {
+.left-nav {
   overflow:auto;
 }
 
@@ -63,10 +63,10 @@ img{
 
 .header {
   display:flex;
-  justify-content: left;
+  justify-content: center;
 }
 
-.sidebar header {
+.left-nav header {
   display:flex;
   justify-content: center;
   font-size: 14px;
@@ -90,9 +90,16 @@ img{
   border-radius:10px;
   text-align:center;
   text-decoration:none;
+  cursor: pointer;
 }
 
-.createButton {
+.map-button:hover {
+  color: white;
+  border:rgb(175, 172, 172) 2px solid;
+  background-color: grey;
+}
+
+.createMap {
   background-color: black;
   border: none;
   color: white;
@@ -105,10 +112,59 @@ img{
   cursor: pointer;
 }
 
-.sidebar footer {
+.createMap:hover {
+  background-color: white;
+  border: none;
+  color: black;
+}
+
+#cancelButton {
+  background-color: black;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+#submitButton {
+  background-color: black;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.left-nav footer {
   bottom: 0;
   text-align: center;
   margin: 1rem;
   padding: 1em;
 }
 
+.pinButtons {
+  color: black;
+  border:white 2px solid;
+  background-color: white;
+  padding: 0.8em;
+  font-size:14px;
+  border-radius:10px;
+  text-align:center;
+  text-decoration:none;
+  cursor: pointer;
+}
+
+.pinButtons:hover {
+  color: white;
+  border:rgb(175, 172, 172) 2px solid;
+  background-color: grey;
+}
