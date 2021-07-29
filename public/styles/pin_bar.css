@@ -58,17 +58,6 @@ img.image {
 }
 
 div.pin_container {
- /* nav bar on right style */
- /*float: right;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  color: white;
-  background-color: #013220;
-  width: 30vw;
-  height: 100vh;
-  padding: 1.3em;
-  margin-right: 0;
-  transition: 0.8 all; */
-
 /* smaller floating style */
   display:flex;
   overflow:auto;
@@ -79,7 +68,8 @@ div.pin_container {
   width: 30vw;
   height: 70vh;
   transition: 0.8 all;
-  border-radius: 3em;
+/*   border-top-right-radius: 3em; */
+  border-bottom-right-radius: 3em;
 }
 
  .write_up {
