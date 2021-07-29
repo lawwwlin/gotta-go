@@ -1,0 +1,96 @@
+div.pin_details{
+  float:left;
+}
+
+img.image {
+  width: 28vw;
+  height: auto;
+  padding: 0.05vw;
+}
+
+.toggle_button:hover {
+  background-color: rgb(127, 235, 145);
+}
+
+.toggle_button:before {
+  content: '\276F'
+}
+
+.toggle_close:before {
+  content: '\276E';
+  display: flex;
+  align-items: center;
+}
+
+button.toggle_button {
+  float: right;
+  background-color: rgb(131, 230, 152);
+  color: black;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  font-size: large;
+  margin-top: 35vh;
+}
+
+.left_side {
+  margin-left: -30vw;
+  transition: 0.8 all;
+}
+
+/* pin nav content styling */
+img.image {
+  width: 28vw;
+  height: auto;
+  padding: 0.5em;
+  display:flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.pin_title {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin-top: 1.4em;
+  margin-left: 1.3em;
+  font-size: 20px;
+}
+
+.sidebar header {
+  text-align: left;
+}
+
+div.pin_container {
+  float: right;
+  display:flex;
+  overflow:auto;
+  align-self:center;
+  justify-content: left;
+  color: white;
+  background-color: rgb(131, 230, 152);
+  background-image: url("/images/graphy.png");
+  width: 30vw;
+  margin-left: -30vw;
+  height: 70vh;
+  transition: 0.8 all;
+  border-radius: 3em;
+  border-top-left-radius:0;
+}
+
+.left_side {
+  margin-left: 30vw;
+  transition: 0.8 all;
+}
+
+.write_up {
+  display:flex;
+  justify-content: center;
+  border-top: 2px black solid;
+  padding-top: 1em;
+}
+
+.edit_pin{
+  color:blue;
+  margin-left:38%
+
+}
+
