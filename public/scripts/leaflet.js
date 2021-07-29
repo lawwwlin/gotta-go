@@ -6,6 +6,7 @@ $(() => {
 
   console.log('getUser(): ', getUser())
   getUser()
+  updateUserLocation()
 
   //set to user location
   map.locate({ setView: true, maxZoom: 15 })
@@ -70,11 +71,6 @@ $(() => {
     return marker;
   }
 
-  const renderPinDeets = function () {
-    $('nav.pin_bar').empty();
-    $
-  }
-
 
   //only load pins within radius
   function radiusCheck(pin, rad) {
@@ -86,6 +82,7 @@ $(() => {
       }
     }
   }
+
   //add Pins to Map
   $.get('/api/pins', (obj) => {
     for (const pin of obj.pins) {
