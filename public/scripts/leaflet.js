@@ -3,18 +3,7 @@ $(() => {
   map.locate({ setView: true, maxZoom: 15 })
   // console.log(getUser())
   //use getUser(), use window.user
-  const userLocation = function() {
-    const userCoords = [window.user.latitude, window.user.longitude];
-    return userCoords
 
-    // $.get('/api/users/', (obj) => {
-    //   const user_id = obj.user_id;
-    //   $.get(`/api/users/${user_id}/location`, (obj) => {
-    //     const location = [obj.userData[0].latitude, obj.userData[0].longitude];
-    //     console.log("location in func: ", location);
-    //   })
-    // });
-  };
 
 
 
@@ -22,9 +11,6 @@ $(() => {
 
   //set to true if create map is selected
   const createMap = false;
-
-  const userDistance = (location) => {return Math.round(map.distance(userLocation(), location))};
-
 
   function makePin(pin) {
     const marker = L.marker([pin.latitude, pin.longitude]);
@@ -53,8 +39,6 @@ $(() => {
       $('div.pin_container').append($nav);
       $('div.pin_details').addClass('left_side') //animate this
       $('.toggle_button').removeClass('toggle_close').addClass('toggle_open')
-      // $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
-      // $('.toggle_button').toggleClass('toggle_close');
     })
     return marker;
   }
@@ -71,27 +55,69 @@ $(() => {
     }
   }
 
-  //add Pins to Map
-  $.get('/api/pins', (obj) => {
-    for (const pin of obj.pins) {
-      makePin(pin).addTo(map)
+  // map: {{mapleLayer1: [marker1, marker 2]}, {mapleLayer2: [marker1, marker 2]}, {mapleLayer3: [marker1, marker 2]}}
+  // add layers to Map
+  $.get(`/api/maps/`, (obj) => {
+    console.log("getting maps", obj);
+    const temp = {};
+    const mapLayers = L.layerGroup();
+    for (let i = 0; i < obj.maps.length; i++) {
+      const map_id = obj.maps[i].id;
+      temp[i] = map_id;
+      const mapLayer = L.layerGroup();
+      mapLayer.addTo(mapLayers);
     }
+
+    let counter = 0;
+    mapLayers.eachLayer(function(layer) {
+      // assign
+      layer.layerID = temp[counter];
+      counter+=1;
+    });
+
+    //add Pins to layers
+    $.get(`/api/pins/`, (obj) => {
+      console.log('adding all the pins', obj);
+      for (const pin of obj.pins) {
+        $.get(`/api/mapPins/${pin.id}`, (obj) => {
+          // const { pin_id, creator_id, title, description, image_url, latitude, longitude, map_id } = obj.pins;
+          for (let i = 0; i < obj.length; i++) {
+            // console.log('map id?', typeof obj[i].map_id)
+            // console.log('all the layers', mapLayers.getLayers());
+            mapLayers.eachLayer(function (layer) {
+              console.log('layer id', layer.layerID, 'map id', obj[i].map_id)
+              if (layer.id === obj[i].map_id) {
+                console.log('making pin for layer.id');
+                makePin(obj[i]).addTo(mapLayers.getLayer(obj[i].map_id));
+              }
+            });
+          }
+        });
+      }
+    });
   });
 
 
-  //used to control loading of pins/handle lag
-  map.on('load', function () {
-    $.get('/api/pins', (obj) => {
-      for (const pin of obj.pins) {
-        //if the pin is in a ~100km radius of the center of the map then it will load to the map
-        if (radiusCheck(pin, 0.5)) {
-          makePin(pin);
-        } else {
-          map.remove(pin);
-        }
-      }
-    })
-  })
+
+
+
+  // //used to control loading of pins/handle lag
+  // map.on('load', function () {
+  //   // $.get(`/api/mapPins/${map_id}`, (obj) => {
+
+  //   // });
+  //   console.log('on map load');
+  //   $.get('/api/pins', (obj) => {
+  //     for (const pin of obj.pins) {
+  //       //if the pin is in a ~100km radius of the center of the map then it will load to the map
+  //       if (radiusCheck(pin, 0.5)) {
+  //         makePin(pin);
+  //       } else {
+  //         map.remove(pin);
+  //       }
+  //     }
+  //   })
+  // })
 
 
   //only works for buttons with class of "mapButtons"

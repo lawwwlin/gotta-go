@@ -1,4 +1,3 @@
-//             merge pins side bar
 // ***** TODO: make onclick function for pins
 //             make map a layer group that contains pins
 //             make button for user to favourite a map
@@ -24,7 +23,7 @@ $(document).ready(function () {
     const marker = L.marker(latlng, { icon: myIcon }).addTo(window.map);
     const popup = L.popup().setContent(content);
     marker.bindPopup(popup).openPopup();
-    map.panTo([lat, long], 15);
+    map.flyTo([lat, long], 15);
   };
 
   const updateUserLocation = () => {
@@ -88,7 +87,6 @@ $(document).ready(function () {
 
   // clicking any map button
   $('.sidebar').on('click', '.map-button', function () {
-    const zoom = 14;
     const buttonID = $(this).attr('id');
     console.log("button ID = " + buttonID);
 
@@ -98,7 +96,7 @@ $(document).ready(function () {
       const map_lat = result.maps[0].latitude;
       const map_long = result.maps[0].longitude;
       const map_name = result.maps[0].name;
-      map.panTo([map_lat, map_long], zoom);
+      map.flyTo([map_lat, map_long], 15);
       const $sidebar = $('.sidebar');
       $sidebar.empty();
 
@@ -108,7 +106,8 @@ $(document).ready(function () {
         $h3.appendTo($('.sidebar'));
         for (let i = 0; i < obj.length; i++) {
           const { pin_id, title, latitude, longitude } = obj[i];
-          const pinButton = $(`<div class='pinButtons'>${title} @${latitude}, ${longitude}</div><br>`);
+          const distance = userDistance([latitude, longitude]);
+          const pinButton = $(`<div class='pinButtons'>${title} ${distance} away</div><br>`);
           $(pinButton).attr('id', `${pin_id}`);
           pinButton.appendTo($h3);
         }
@@ -121,15 +120,13 @@ $(document).ready(function () {
           });
         })
       $('.sidebar').on('click', '.pinButtons', function () {
-        const zoom = 14;
         const buttonID = $(this).attr('id');
         $.getJSON(`http://localhost:8080/api/pins/${buttonID}`, function (result) {
           console.log('result', result);
-          const pin_id = result.pins[0].id;
           const pin_lat = result.pins[0].latitude;
           const pin_long = result.pins[0].longitude;
-          const pin_name = result.pins[0].name;
-          map.panTo([pin_lat, pin_long], zoom);
+          map.flyTo([pin_lat, pin_long], 17);
+          //layer.openPopup([pin_lat, pin_long]);
         })
       })
     })
@@ -269,8 +266,8 @@ $(document).ready(function () {
         marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
         $('p.submit_popup').hide();
         $('button.submit_popup').show();
-        $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
-        $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
+        $('label.pinlat').show().text(`latitude: ${lat}`)
+        $('label.pinlng').show().text(`longitude: ${lon}`)
       });
     })
 
