@@ -39,7 +39,7 @@ const updateUserLocation = () => {
     window.user.latitude = e.latitude;
     window.user.longitude = e.longitude;
     const radius = e.accuracy / 2;
-    makeUserPin(e.latitude, e.longitude, `<p>You are within ${radius} meters from this point</p>`);
+    makeUserPin(e.latitude, e.longitude, `<p>That's you!</p>`);
     L.circle(e.latlng, radius).addTo(window.map);
     if (userIsLoggedIn()) {
       setUserLocation(window.user);
