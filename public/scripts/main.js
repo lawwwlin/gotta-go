@@ -82,8 +82,14 @@ $(document).ready(function() {
 
       // update sidebar username
       $(".sidebar header").text(`user: ${username}`);
+
+      // make create map button
       const $createButton = $('<footer><button class="createMap">create map</button></footer>');
       $createButton.appendTo($('.sidebar'));
+
+      // make create pin button
+      const $createPin = $('<div><button class="createPin">create pin</button></div>');
+      $createPin.appendTo($createButton);
 
       const mapDiv = $(".mapButtons");
 
@@ -142,16 +148,17 @@ $(document).ready(function() {
       });
     });
 
-
     $form.on('click', '#cancelButton', () => {
       console.log('cancel button');
       renderNav();
     });
 
+
+
     //WIP
-    $('button.cancel').on('click', function () {
-      $sidebar.empty()
-    })
+    // $('button.cancel').on('click', function () {
+    //   $sidebar.empty()
+    // })
 
     //form submit for creating pins
     const $pinform = $(`<form>
@@ -173,7 +180,7 @@ $(document).ready(function() {
     </form> `);
 
     //change button layout
-    $('button#createPin').on('click', function () {
+    $('.sidebar').on('click', '.createPin', function() {
       const $pin_bar = $('div.pin_container');
       $pin_bar.empty();
       $pin_bar.append($pinform);
