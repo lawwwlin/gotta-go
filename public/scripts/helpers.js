@@ -1,5 +1,15 @@
 // helper functions that can get called by any script
 
+$(() => {
+  window.map = L.map('map', {
+    center: [48.42959706075791, -123.34509764072138],
+    zoom: 13
+  })
+  L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=4Z6KRmYugsIBUnw1Jpiy', {
+    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+  }).addTo(map);
+});
+
 const userIsLoggedIn = () => {
   // if the current user has a username, which means this user is updated from getUser();
   if (window.user.username) {
@@ -16,8 +26,6 @@ const getUser = () => {
     console.log('logged in user is:', window.user);
   });
 };
-
-getUser();
 
 const makeUserPin = (lat, long, content) => {
 const latlng = L.latLng(lat, long);
