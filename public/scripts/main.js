@@ -217,6 +217,74 @@ $(document).ready(function() {
         });
       });
 
+
+
+      //favourite map buttons
+      $.get(`/api/faveMaps/${user_id}`, (obj) => {
+        const mapDiv = $(".mapButtons");
+        const $faveMapNav = $(`</br>
+          <h3> Favourite Maps </h3>
+        `)
+        $faveMapNav.appendTo(mapDiv)
+        for (let i = 0; i < obj.length; i++) {
+          const map = obj[i].map_id
+          console.log(`map: ${map}`)
+          const $faveMapButton = $(`<div><button>${map}</button></div>`);
+          $($faveMapButton).attr('id', `${map}`);
+          $faveMapButton.addClass('fav-map-button');
+          $faveMapButton.appendTo(mapDiv);
+
+        }
+
+        //on click will zoom to map area
+        $('.fav-map-button').on('click', function () {
+          const zoom = 14;
+          const buttonID = $(this).attr('id');
+          console.log("button ID = " + buttonID);
+
+          $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
+            //console.log('result', result);
+            const map_id = result.maps[0].id;
+            const map_lat = result.maps[0].latitude;
+            const map_long = result.maps[0].longitude;
+            map.panTo([map_lat, map_long], zoom);
+          })
+        })
+      })
+
+      //create map button
+      const $form = $(`<form>
+      <input type="hidden" name="creator_id" value="${user_id}" />
+
+      <label for="name">Map name:</label><br><br>
+      <input type="text" name="name" id="name" placeholder="Map Name3" /><br><br>
+
+      <label for="latitude">Latitude:</label><br><br>
+      <input type="text" name="latitude" id="latitude" placeholder="48.2827" /><br><br>
+
+      <label for="longitude">Longitude:</label><br><br>
+      <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
+      <button type="submit">submit</button>
+      </form> `);
+
+      $('.sidebar footer').on('click', function () {
+      const $sidebar = $('.sidebar');
+      $sidebar.empty();
+      $form.appendTo($sidebar);
+      });
+
+      $form.submit((event) => {
+        event.preventDefault();
+        const data = $form.serialize();
+        $.post(`/api/maps/`, data)
+          .then(() => {
+            console.log(data);
+            $.get(`/api/users/${user_id}`, (obj) => {
+              location.reload();
+            });
+          });
+      });
+
       // user is not logged in
     } else {
       const $header = $('.sidebar h3');
