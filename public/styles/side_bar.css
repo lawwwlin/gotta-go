@@ -42,3 +42,15 @@ nav.side {
   margin-right: -18vw;
   transition: 0.8 all;
 }
+
+.mapButtons {
+  text-align: left;
+  padding-left: 0.5em;
+}
+
+.sidebar footer {
+  bottom: 0;
+  text-align: center;
+  margin: 1rem;
+  padding: 1em;
+}
