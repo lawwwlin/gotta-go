@@ -31,7 +31,7 @@ module.exports = (db) => {
     db.query(`SELECT * FROM maps WHERE maps.id = $1;`, [values])
       .then(data => {
         const maps = data.rows;
-        res.json({ maps })
+        res.json({ maps });
       })
       .catch(err => {
         res.status(500)

@@ -5,7 +5,11 @@ module.exports = (db) => {
   //retrieves all user's fave maps in database
   router.get("/:id", (req, res) => {
     const user_id = req.params.id;
-    db.query(`SELECT * FROM favourited_maps WHERE user_id = $1;`, [user_id])
+    db.query(`SELECT maps.id, maps.name, users.username
+    FROM favourited_maps
+    JOIN maps ON maps.id = map_id
+    JOIN users ON users.id = creator_id
+    WHERE user_id = $1;`, [user_id])
       .then(data => {
         const faveMaps = data.rows;
         console.log(`favemaps:`, faveMaps)

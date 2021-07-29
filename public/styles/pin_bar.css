@@ -4,12 +4,13 @@ div.pin_details{
 
 button.toggle_button {
   float: right;
-  background-color: transparent;
+  background-color: orange;
   color: black;
   border: none;
   cursor: pointer;
   z-index: 100;
   font-size: large;
+  margin-top: 25vw;
 }
 
 img.image {
@@ -19,19 +20,15 @@ img.image {
 }
 
 .toggle_button:hover {
-  background-color: pink;
+  background-color: rgb(139, 60, 28);
 }
 
 .toggle_button:before {
-  content: '✖'
-}
-
-.toggle_open {
-  content: '✖';
+  content: '\276F'
 }
 
 .toggle_close:before {
-  content: '\2630';
+  content: '\276E';
   display: flex;
   align-items: center;
 }
@@ -45,6 +42,7 @@ div.pin_container {
   color: whitesmoke;
   background-color: orange;
   width: 30vw;
+  margin-left: -30vw;
   height: 100vh;
   padding: 1vw;
   margin-right: 0;
@@ -53,6 +51,6 @@ div.pin_container {
 }
 
 .left_side {
-  margin-left: -30vw;
+  margin-left: 30vw;
   transition: 0.8 all;
 }
