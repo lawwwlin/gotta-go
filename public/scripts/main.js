@@ -1,7 +1,9 @@
+//             merge pins side bar
 // ***** TODO: make onclick function for pins
-//             show distance away from the user for nearby maps
+//             make map a layer group that contains pins
+//             make button for user to favourite a map
+//             show distance away from the user in the pin panel
 //             rating system
-//             pins side bar
 
 
 // define a default user location at Vancouver

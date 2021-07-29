@@ -24,8 +24,8 @@ module.exports = (db) => {
 
   //add map
   router.post("/", (req, res) => {
-    const { map_id, pin_id } = req.body;
-    db.query(`INSERT INTO favourited_maps (map_id, pin_id) VALUES ($1, $2) RETURNING *;`, [map_id, pin_id])
+    const { map_id, user_id } = req.body;
+    db.query(`INSERT INTO favourited_maps (map_id, user_id) VALUES ($1, $2) RETURNING *;`, [map_id, user_id])
       .then(data => {
         const mapPins = data.rows[0];
         res
