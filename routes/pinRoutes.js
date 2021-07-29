@@ -36,9 +36,9 @@ module.exports = (db) => {
 
 
   //add pins
-  router.post("/:id", (req, res) => {
-    const { user_id, title, description, latitude, longitude, image } = req.body;
-    db.query(`INSERT INTO pins (user_id, title, description, latitude, longitude, image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`, [user_id, title, description, latitude, longitude, image])
+  router.post("/", (req, res) => {
+    const { user_id, title, description, image_url , latitude, longitude} = req.body;
+    db.query(`INSERT INTO pins (creator_id, title, description, image_url, latitude, longitude,) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`, [user_id, title, description, image_url, latitude, longitude])
       .then(data => {
         const pins = data.rows[0];
         res

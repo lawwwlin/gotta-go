@@ -14,27 +14,18 @@ $(() => {
   const userLocation = function() {
     const userCoords = [window.user.latitude, window.user.longitude];
     return userCoords
-
-    // $.get('/api/users/', (obj) => {
-    //   const user_id = obj.user_id;
-    //   $.get(`/api/users/${user_id}/location`, (obj) => {
-    //     const location = [obj.userData[0].latitude, obj.userData[0].longitude];
-    //     console.log("location in func: ", location);
-    //   })
-    // });
   };
 
+  const userDistance = (location) => {return Math.round(map.distance(userLocation(), location))};
 
-  L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
+  L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=4Z6KRmYugsIBUnw1Jpiy', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
   }).addTo(map);
-
   //const map1 = L.layerGroup([])
 
   //set to true if create map is selected
-  const createMap = false;
+  // const createMap = false;
 
-  const userDistance = (location) => {return Math.round(map.distance(userLocation(), location))};
 
 
   function makePin(pin) {

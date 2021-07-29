@@ -145,19 +145,13 @@ $(document).ready(function() {
           $form.appendTo($sidebar);
         });
 
-        //WIP
-        $('button.cancel').on('click', function () {
-          $sidebar.empty()
-
-        })
-
 
         $form.submit((event) => {
           event.preventDefault();
           const data = $form.serialize();
+          console.log(data);
           $.post(`/api/maps/`, data)
             .then(() => {
-              console.log(data);
               $.get(`/api/users/${user_id}`, (obj) => {
                 location.reload();
               });
@@ -169,28 +163,34 @@ $(document).ready(function() {
         <input type="hidden" name="creator_id" value="${user_id}" />
 
         <label for="title">Pin Name:</label><br><br>
-        <input type="text" name="name" id="name" placeholder="New Pin" /><br><br>
+        <input type="text" name="title" id="name" placeholder="New Pin" /><br><br>
 
         <label for="description">Description:</label><br><br>
-        <input type="text" name="latitude" id="latitude" placeholder="48.2827" /><br><br>
+        <textarea type="text" name="description" placeholder="description" /><br><br>
 
         <label for="img_url">Image URL:</label><br><br>
-        <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
+        <input type="text" name="image_url" id="longitude" placeholder="image url" /><br><br>
         <p class="submit_popup">Please click on the map where you would like to create your pin.</p>
         <label for="latitude" class="pinlat" hidden></label><br>
+        <input type="text" class="pinlat" name="latitude" hidden />
         <label for="longitude" class="pinlng" hidden></label><br>
+        <input type="text" class="pinlng" name="longitude" hidden/>
         <button class="submit_popup" type="submit" hidden>submit</button>
-        <button class="cancel">cancel</button>
+        </form>
 
-      </form> `);
+        <button class="cancel" type="cancel">cancel</button>
+
+      `);
 
         //change button layout
         $('button#createPin').on('click', function () {
           const $pin_bar = $('div.pin_container');
           $pin_bar.empty();
           $pin_bar.append($pinform);
+          //make pin-bar appear if tucked away
+          $('div.pin_details').removeClass('left_side') //animate this
+          $('.toggle_button').removeClass('toggle_close').addClass('toggle_open')
           let marker = {};
-
           map.on('click', function(e) {
             lat = e.latlng.lat;
             lon = e.latlng.lng;
@@ -201,25 +201,14 @@ $(document).ready(function() {
             marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
             $('p.submit_popup').hide();
             $('button.submit_popup').show();
-            $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
-            $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
+            $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`);
+            $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`);
+            $('input.pinlng').val(lon);
+            $('input.pinlat').val(lat);
           });
-        })
-
-        //     WIP
-        // $pinform.submit((event) => {
-        //   event.preventDefault();
-        //   const data = $pinform.serialize();
-        //   $.post(`/api/pins/`, data)
-        //     .then(() => {
-        //       console.log(data);
-        //       $.get(`/api/users/${user_id}`, (obj) => {
-        //         location.reload();
-        //       });
-        //     });
-        // });
 
           $('button.cancel').on('click', function () {
+            console.log('cancel clicked')
             map.off('click', function(e) {
               lat = e.latlng.lat;
               lon = e.latlng.lng;
@@ -238,6 +227,35 @@ $(document).ready(function() {
             $('.toggle_button').toggleClass('toggle_close');
             map.removeLayer(marker);
           });
+        })
+
+        //     WIP
+        $pinform.submit((event) => {
+          event.preventDefault();
+          const data = $pinform.serialize();
+          console.log('data: ', data)
+          map.off('click', function(e) {
+            lat = e.latlng.lat;
+            lon = e.latlng.lng;
+            if (marker != undefined) {
+              map.removeLayer(marker);
+            };
+            marker=L.marker(e.latlng).addTo(window.map);
+            marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
+            $('p.submit_popup').hide();
+            $('button.submit_popup').show();
+            $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
+            $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
+          });
+          $.post(`/api/pins/`, data)
+            .then(() => {
+              console.log(data);
+              $.get(`/api/users/${user_id}`, (obj) => {
+                location.reload();
+              });
+            });
+        });
+
           //maybe some more code here
         });
 
