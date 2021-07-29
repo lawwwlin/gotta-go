@@ -9,9 +9,65 @@
 // define a default user location at Vancouver
 window.user = { latitude: 49.260833, longitude: -123.113889 };
 
-$(document).ready(function() {
-  // patch via ajax current logged in user latitude and longitude in the users table
+$(document).ready(function () {
 
+
+
+  const makeUserPin = (lat, long, content) => {
+    const latlng = L.latLng(lat, long);
+    const myIcon = L.icon({
+      iconUrl: src = '/images/poop.png',
+      iconSize: [38, 38],
+      iconAnchor: [20, 20],
+      popupAnchor: [0, -15]
+    });
+    const marker = L.marker(latlng, { icon: myIcon }).addTo(window.map);
+    const popup = L.popup().setContent(content);
+    marker.bindPopup(popup).openPopup();
+    map.panTo([lat, long], 15);
+  };
+
+  const updateUserLocation = () => {
+    window.map.locate({ setView: true, maxZoom: 15, enableHighAccuracy: true })
+      .on('locationfound', function (e) {
+        window.user.latitude = e.latitude;
+        window.user.longitude = e.longitude;
+        const radius = e.accuracy / 2;
+        makeUserPin(e.latitude, e.longitude, `<p>You are within ${radius} meters from this point</p>`);
+        L.circle(e.latlng, radius).addTo(window.map);
+        if (userIsLoggedIn()) {
+          setUserLocation(window.user);
+        }
+      })
+      // if location not found or blocked
+      .on('locationerror', function (e) {
+        console.log('location blocked, user lat:', window.user.latitude, 'long:', window.user.longitude);
+        if (userIsLoggedIn()) {
+          makeUserPin(window.user.latitude, window.user.longitude, `<p>Your last location was here</p>`);
+        } else {
+          makeUserPin(window.user.latitude, window.user.longitude, `<p>No location found, default to Vancouver City Hall</p>`);
+        }
+      });
+  };
+
+  // patch via ajax current logged in user latitude and longitude in the users table
+  const setUserLocation = (user) => {
+    $.ajax({
+      url: `http://localhost:8080/api/users/${user.id}`,
+      type: 'PATCH',
+      data: { latitude: user.latitude, longitude: user.longitude },
+      success: function () {
+        console.log(`user location Successfully Patched! user lat: ${user.latitude}, user long:${user.longitude}`);
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // log the error to the console
+        console.log("The following error occured: " + textStatus, errorThrown);
+      },
+      complete: function () {
+        console.log("Patching completed");
+      }
+    })
+  };
 
   const getMapNearUserLocation = () => {
     console.log(window.user);
@@ -31,7 +87,7 @@ $(document).ready(function() {
   };
 
   // clicking any map button
-  $('.sidebar').on('click', '.map-button' ,function () {
+  $('.sidebar').on('click', '.map-button', function () {
     const zoom = 14;
     const buttonID = $(this).attr('id');
     console.log("button ID = " + buttonID);
@@ -46,21 +102,35 @@ $(document).ready(function() {
       const $sidebar = $('.sidebar');
       $sidebar.empty();
 
+      //get pin buttons from maps
       $.get(`/api/mapPins/${map_id}`, (obj) => {
         const $h3 = $(`<div><h3>Pins for ${map_name}</h3></div><br>`);
         $h3.appendTo($('.sidebar'));
         for (let i = 0; i < obj.length; i++) {
-          const {pin_id, title, latitude, longitude} = obj[i];
+          const { pin_id, title, latitude, longitude } = obj[i];
           const pinButton = $(`<div class='pinButtons'>${title} @${latitude}, ${longitude}</div><br>`);
           $(pinButton).attr('id', `${pin_id}`);
           pinButton.appendTo($h3);
-        }})
-      .then(() => {
-        const $backButton = $('</br><button>back</button>')
-        $backButton.appendTo($('.sidebar'))
-        $($backButton).on('click', function () {
-          renderNav();
-        });
+        }
+      })
+        .then(() => {
+          const $backButton = $('</br><button>back</button>')
+          $backButton.appendTo($('.sidebar'))
+          $($backButton).on('click', function () {
+            renderNav();
+          });
+        })
+      $('.sidebar').on('click', '.pinButtons', function () {
+        const zoom = 14;
+        const buttonID = $(this).attr('id');
+        $.getJSON(`http://localhost:8080/api/pins/${buttonID}`, function (result) {
+          console.log('result', result);
+          const pin_id = result.pins[0].id;
+          const pin_lat = result.pins[0].latitude;
+          const pin_long = result.pins[0].longitude;
+          const pin_name = result.pins[0].name;
+          map.panTo([pin_lat, pin_long], zoom);
+        })
       })
     })
   });
@@ -103,22 +173,22 @@ $(document).ready(function() {
 
     // create map form
     const $form = $(`<form>
-        <input type="hidden" name="creator_id" value="${user_id}" />
+          <input type="hidden" name="creator_id" value="${user_id}" />
 
-        <label for="name">Map name:</label><br><br>
-        <input type="text" name="name" id="name" placeholder="Map Name" /><br><br>
+          <label for="name">Map name:</label><br><br>
+          <input type="text" name="name" id="name" placeholder="Map Name" /><br><br>
 
-        <label for="latitude">Latitude:</label><br><br>
-        <input type="text" name="latitude" id="latitude" placeholder="49.260833" /><br><br>
+          <label for="latitude">Latitude:</label><br><br>
+          <input type="text" name="latitude" id="latitude" placeholder="49.260833" /><br><br>
 
-        <label for="longitude">Longitude:</label><br><br>
-        <input type="text" name="longitude" id="longitude" placeholder="-123.113889" /><br><br>
-        <span></span> <br><br>
-        <button type="submit" id="submitButton" value="Submit">submit</button>
-        <button type="button" id="cancelButton">Cancel</button>
-      </form> `);
+          <label for="longitude">Longitude:</label><br><br>
+          <input type="text" name="longitude" id="longitude" placeholder="-123.113889" /><br><br>
+          <span></span> <br><br>
+          <button type="submit" id="submitButton" value="Submit">submit</button>
+          <button type="button" id="cancelButton">Cancel</button>
+        </form> `);
 
-    $('.sidebar').on('click', '.createMap', function() {
+    $('.sidebar').on('click', '.createMap', function () {
       const $sidebar = $('.sidebar');
       $sidebar.empty();
       $form.appendTo($sidebar);
@@ -128,18 +198,18 @@ $(document).ready(function() {
     $form.submit((event) => {
       event.preventDefault();
       if ($.trim($("#name").val()) === "" || $.trim($("#latitude").val()) === "" || $.trim($("#longitude").val()) === "") {
-        return $( "span" ).text( "One of the field is empty!" ).show().fadeOut( 4000 );
+        return $("span").text("One of the field is empty!").show().fadeOut(4000);
       } else if (isNaN(parseFloat($.trim($("#latitude").val()))) || isNaN(parseFloat($.trim($("#longitude").val())))) {
-        return $( "span" ).text( "Please be mature and input proper latitude or longitude!" ).show().fadeOut( 4000 );
+        return $("span").text("Please be mature and input proper latitude or longitude!").show().fadeOut(4000);
       }
       const data = $form.serialize();
       $.post(`/api/maps/`, data)
-      .then(() => {
-        console.log(data);
-        $.get(`/api/users/${user_id}`, (obj) => {
-          renderNav();
+        .then(() => {
+          console.log(data);
+          $.get(`/api/users/${user_id}`, (obj) => {
+            renderNav();
+          });
         });
-      });
     });
 
 
@@ -147,87 +217,6 @@ $(document).ready(function() {
       console.log('cancel button');
       renderNav();
     });
-
-    //WIP
-    $('button.cancel').on('click', function () {
-      $sidebar.empty()
-    })
-
-    //form submit for creating pins
-    const $pinform = $(`<form>
-    <input type="hidden" name="creator_id" value="${user_id}" />
-
-    <label for="title">Pin Name:</label><br><br>
-    <input type="text" name="name" id="name" placeholder="New Pin" /><br><br>
-
-    <label for="description">Description:</label><br><br>
-    <input type="text" name="latitude" id="latitude" placeholder="48.2827" /><br><br>
-
-    <label for="img_url">Image URL:</label><br><br>
-    <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
-    <p class="submit_popup">Please click on the map where you would like to create your pin.</p>
-    <label for="latitude" class="pinlat" hidden></label><br>
-    <label for="longitude" class="pinlng" hidden></label><br>
-    <button class="submit_popup" type="submit" hidden>submit</button>
-    <button class="cancel">cancel</button>
-    </form> `);
-
-    //change button layout
-    $('button#createPin').on('click', function () {
-      const $pin_bar = $('div.pin_container');
-      $pin_bar.empty();
-      $pin_bar.append($pinform);
-      let marker = {};
-
-      map.on('click', function(e) {
-        lat = e.latlng.lat;
-        lon = e.latlng.lng;
-        if (marker != undefined) {
-          map.removeLayer(marker);
-        };
-        marker=L.marker(e.latlng).addTo(window.map);
-        marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
-        $('p.submit_popup').hide();
-        $('button.submit_popup').show();
-        $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
-        $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
-      });
-    })
-
-    //     WIP
-    // $pinform.submit((event) => {
-    //   event.preventDefault();
-    //   const data = $pinform.serialize();
-    //   $.post(`/api/pins/`, data)
-    //     .then(() => {
-    //       console.log(data);
-    //       $.get(`/api/users/${user_id}`, (obj) => {
-    //         location.reload();
-    //       });
-    //     });
-    // });
-
-    $('button.cancel').on('click', function () {
-      map.off('click', function(e) {
-        lat = e.latlng.lat;
-        lon = e.latlng.lng;
-        if (marker != undefined) {
-          map.removeLayer(marker);
-        };
-        marker=L.marker(e.latlng).addTo(window.map);
-        marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
-        $('p.submit_popup').hide();
-        $('button.submit_popup').show();
-        $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
-        $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
-      });
-      $pin_bar.empty();
-      $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
-      $('.toggle_button').toggleClass('toggle_close');
-      map.removeLayer(marker);
-    });
-    //maybe some more code here
-
 
     //favourite map buttons
     $.get(`/api/faveMaps/${user_id}`, (obj) => {
@@ -238,15 +227,33 @@ $(document).ready(function() {
       $faveMapNav.appendTo(mapDiv)
       console.log('fav maps:', obj);
       for (let i = 0; i < obj.length; i++) {
-        const {id, name, username} = obj[i];
+        const { id, name, username } = obj[i];
         const $faveMapButton = $(`<div>${name}<br>created by: ${username}</div><br>`);
         $($faveMapButton).attr('id', `${id}`);
         $faveMapButton.addClass('map-button');
         $faveMapButton.appendTo(mapDiv);
       }
+
+      //on click will zoom to map area
+      // $('.fav-map-button').on('click', function () {
+      //   const zoom = 14;
+      //   const buttonID = $(this).attr('id');
+      //   console.log("button ID = " + buttonID);
+
+      //   $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
+      //     //console.log('result', result);
+      //     const map_id = result.maps[0].id;
+      //     const map_lat = result.maps[0].latitude;
+      //     const map_long = result.maps[0].longitude;
+      //     map.panTo([map_lat, map_long], zoom);
+      //   })
+      // })
     })
 
   };
+
+
+
 
   /* get current logged in user object from the users table and set it to global variable
   which includes id, username, password, latitue, longitude */
