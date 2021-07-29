@@ -5,6 +5,7 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  font-family: 'Oxygen', sans-serif;
 }
 
 body h1 {

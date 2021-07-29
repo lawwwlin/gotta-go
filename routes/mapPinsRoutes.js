@@ -6,7 +6,10 @@ module.exports = (db) => {
   router.get("/:id", (req, res) => {
     //    console.log('/api/mapPins');
     const map_id = req.params.id;
-    db.query(`SELECT * FROM map_pins WHERE map_id = $1;`, [map_id])
+    db.query(`SELECT map_pins.pin_id, pins.title, pins.latitude, pins.longitude
+      FROM map_pins
+      JOIN pins ON pins.id =  pin_id
+      WHERE map_id = $1;`, [map_id])
       .then(data => {
         const mapPins = data.rows;
         console.log(mapPins)
