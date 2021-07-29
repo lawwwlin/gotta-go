@@ -29,7 +29,7 @@ module.exports = (db) => {
   router.get("/me", (req, res) => {
     console.log('/api/users/me');
     if (!req.session.user_id) {
-      return res.json(undefined);
+      return res.json({latitude: 49.260833, longitude: -123.113889});
     }
     const user_id = req.session.user_id;
     db.query(`SELECT * FROM users WHERE id = $1;`, [user_id])

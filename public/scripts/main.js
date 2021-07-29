@@ -1,5 +1,6 @@
 // define a default user location at Vancouver
 window.user = {latitude: 49.260833, longitude: -123.113889};
+
 $(document).ready(function() {
 
   /* get current logged in user object from the users table and set it to global variable
@@ -10,7 +11,22 @@ $(document).ready(function() {
       console.log('logged in user is:', window.user);
     });
   };
+
   getUser();
+
+  const makeUserPin = (lat, long, content) => {
+    const latlng = L.latLng(lat, long);
+    const myIcon = L.icon({
+      iconUrl: src='/images/poop.png',
+      iconSize: [38, 38],
+      iconAnchor: [20, 20],
+      popupAnchor: [0, -15]
+    });
+    const marker = L.marker(latlng, { icon: myIcon }).addTo(window.map);
+    const popup = L.popup().setContent(content);
+    marker.bindPopup(popup).openPopup();
+    map.panTo([lat, long], 15);
+  };
 
   const updateUserLocation = () => {
     window.map.locate({ setView: true, maxZoom: 15 })
@@ -18,16 +34,7 @@ $(document).ready(function() {
       window.user.latitude = e.latitude;
       window.user.longitude = e.longitude;
       const radius = e.accuracy / 2;
-      const myIcon = L.icon({
-        iconUrl: src='/images/poop.png',
-        iconSize: [38, 38],
-        iconAnchor: [20, 20],
-        popupAnchor: [0, -15]
-      });
-      const marker = L.marker(e.latlng, { icon: myIcon }).addTo(window.map);
-      const popup = L.popup().setContent(`<h3>You are within ${radius} meters from this point</h3>`);
-      marker.bindPopup(popup).openPopup();
-      map.panTo([e.latitude, e.longitude], 15);
+      makeUserPin(e.latitude, e.longitude, `<p>You are within ${radius} meters from this point</p>`);
       L.circle(e.latlng, radius).addTo(window.map);
       if (userIsLoggedIn()) {
         setUserLocation(window.user);
@@ -36,23 +43,10 @@ $(document).ready(function() {
     // if location not found or blocked
     .on('locationerror', function(e) {
       console.log('location blocked, user lat:', window.user.latitude, 'long:', window.user.longitude);
-      const latlng = L.latLng(window.user.latitude, window.user.longitude);
-      const myIcon = L.icon({
-        iconUrl: src='/images/poop.png',
-        iconSize: [38, 38],
-        iconAnchor: [20, 20],
-        popupAnchor: [0, -15]
-      });
       if (userIsLoggedIn()) {
-        const marker = L.marker(latlng, { icon: myIcon }).addTo(window.map);
-        const popup = L.popup().setContent(`<h3>Your last location was here</h3>`);
-        marker.bindPopup(popup).openPopup();
-        map.panTo([window.user.latitude, window.user.longitude], 15);
+        makeUserPin(window.user.latitude, window.user.longitude, `<p>Your last location was here</p>`);
       } else {
-        const marker = L.marker(latlng, { icon: myIcon }).addTo(window.map);
-        const popup = L.popup().setContent(`<h3>No location found, default to Vancouver City Hall</h3>`);
-        marker.bindPopup(popup).openPopup();
-        map.panTo([window.user.latitude, window.user.longitude], 15);
+        makeUserPin(window.user.latitude, window.user.longitude, `<p>No location found, default to Vancouver City Hall</p>`);
       }
     });
   };
@@ -93,7 +87,7 @@ $(document).ready(function() {
     });
   };
 
-  //pans to map [x]'s coordinates
+  // when clicked, pans to specific map's coordinates
   $('.map-button').on('click', function () {
     const zoom = 14;
     const buttonID = $(this).attr('id');
@@ -107,17 +101,7 @@ $(document).ready(function() {
     })
   });
 
-  const createMap = () => {
-
-  };
-
-
   $.get('/api/users', (obj) => {
-    // <header>user:</header>
-    // <div>
-    //   <h3>User maps</h3>
-    //   <div class='mapButtons'></div>
-    // </div>
     const $userMaps = $(`<header>user not logged in</header>
     <div>
       <h3>User maps</h3>
@@ -157,29 +141,6 @@ $(document).ready(function() {
         $createButton.appendTo($('.sidebar'));
         console.log('create button', $createButton);
 
-        // get user location
-        // window.map.locate({ setView: true, maxZoom: 15 })
-        //   .on('locationfound', function (e) {
-        //     user_lat = e.latitude;
-        //     user_long = e.longitude;
-        //     console.log(`user lat: ${user_lat}, user long:${user_long}`)
-
-        //     $.ajax({
-        //       url: `http://localhost:8080/api/users/${user_id}`,
-        //       type: 'PATCH',
-        //       data: { latitude: user_lat, longitude: user_long },
-        //       success: function () {
-        //         console.log(`user location Successfully Patched! user lat: ${user_lat}, user long:${user_long}`);
-        //       },
-        //       error: function (jqXHR, textStatus, errorThrown) {
-        //         // log the error to the console
-        //         console.log("The following error occured: " + textStatus, errorThrown);
-        //       },
-        //       complete: function () {
-        //         console.log("Patching completed");
-        //       }
-        //     })
-        //   });
         updateUserLocation();
 
         //only works for buttons with class of "mapButtons"
@@ -262,58 +223,6 @@ $(document).ready(function() {
       $header.text('Nearby Maps');
       updateUserLocation();
       getMapNearUserLocation();
-
-      // // set default lat long
-      // user_lat = 49.260833;
-      // user_long = 123.113889;
-
-      // //set map to user location
-      // window.map.locate({ setView: true, maxZoom: 15 })
-      //   .on('locationfound', function (e) {
-      //     user_lat = e.latitude;
-      //     user_long = e.longitude;
-      //     console.log('updated user location: lat:', user_lat, 'long:', user_long)
-      //     const radius = e.accuracy / 2;
-      //     const myIcon = L.icon({
-      //       iconUrl: 'https://assets.stickpng.com/images/580b57fcd9996e24bc43c39c.png',
-      //       iconSize: [38, 38],
-      //       iconAnchor: [20, 20],
-      //       popupAnchor: [0, -15]
-      //     });
-      //     const marker = L.marker(e.latlng, { icon: myIcon }).addTo(map);
-      //     const popup = L.popup().setContent(`<h3>You are within ${radius} meters from this point</h3>`);
-      //     marker.bindPopup(popup).openPopup();
-      //     L.circle(e.latlng, radius).addTo(map);
-
-      //     $.get(`/api/maps/${user_lat}/${user_long}`, (obj) => {
-
-      //       console.log('map obj according to location', obj.maps);
-      //       const mapDiv = $('.mapButtons')
-      //       mapDiv.empty();
-      //       for (let i = 0; i < obj.maps.length; i++) {
-      //         const map_name = obj.maps[i].name;
-      //         const map_id = obj.maps[i].id;
-      //         const mapButton = $(`<div><button>${map_name}</button></div>`);
-      //         $(mapButton).attr('id', `${map_id}`);
-      //         mapButton.addClass('map-button');
-      //         mapButton.appendTo(mapDiv);
-      //       }
-
-      //       //pans to map [x]'s coordinates
-      //       $('.map-button').on('click', function () {
-      //         const zoom = 14;
-      //         const buttonID = $(this).attr('id');
-      //         console.log("button ID = " + buttonID);
-
-      //         $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
-      //           console.log('result', result);
-      //           const map_lat = result.maps[0].latitude;
-      //           const map_long = result.maps[0].longitude;
-      //           map.panTo([map_lat, map_long], zoom);
-      //         })
-      //       })
-      //     });
-      //   });
     }
   });
 });
