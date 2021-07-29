@@ -101,6 +101,18 @@ $(document).ready(function() {
     })
   });
 
+
+
+
+
+
+
+
+
+
+
+
+
   $.get('/api/users', (obj) => {
     const $userMaps = $(`<header>user not logged in</header>
     <div>
@@ -123,18 +135,6 @@ $(document).ready(function() {
         username = obj.userData[0].username;
         user_lat = obj.userData[0].user_lat;
         user_long = obj.userData[0].user_long;
-
-        $.get(`/api/users/`, (obj) => { });
-
-        // <div class="favourites">
-        //   <h3>Favourited Maps</h3>
-        //   <ul>Map2</ul>
-        // </div>
-        // <footer>
-        //   <button>create map</button>
-        //   <button>create pin</button>
-        // </footer>
-
 
         $(".sidebar header").text(`user: ${username}`);
         const $createButton = $('<footer><button>create map</button></footer>');
@@ -216,8 +216,6 @@ $(document).ready(function() {
             });
         });
       });
-
-
 
       //favourite map buttons
       $.get(`/api/faveMaps/${user_id}`, (obj) => {
