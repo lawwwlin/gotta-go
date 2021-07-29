@@ -249,11 +249,13 @@ $(document).ready(function () {
     <button class="cancel">cancel</button>
     </form> `);
 
-    //change button layout
+    //clicking createPin button
     $('.sidebar').on('click', '.createPin', function() {
       const $pin_bar = $('div.pin_container');
       $pin_bar.empty();
       $pin_bar.append($pinform);
+      $('div.pin_details').addClass('left_side') //animate this
+      $('.toggle_button').removeClass('toggle_open').addClass('toggle_close')
       let marker = {};
 
       map.on('click', function(e) {
@@ -285,6 +287,7 @@ $(document).ready(function () {
     // });
 
     $('button.cancel').on('click', function () {
+      console.log('cancel clicked');
       map.off('click', function(e) {
         lat = e.latlng.lat;
         lon = e.latlng.lng;
@@ -298,6 +301,7 @@ $(document).ready(function () {
         $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
         $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
       });
+      // stop this afterward
       $pin_bar.empty();
       $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
       $('.toggle_button').toggleClass('toggle_close');
@@ -321,23 +325,7 @@ $(document).ready(function () {
         $faveMapButton.addClass('map-button');
         $faveMapButton.appendTo(mapDiv);
       }
-
-      //on click will zoom to map area
-      // $('.fav-map-button').on('click', function () {
-      //   const zoom = 14;
-      //   const buttonID = $(this).attr('id');
-      //   console.log("button ID = " + buttonID);
-
-      //   $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
-      //     //console.log('result', result);
-      //     const map_id = result.maps[0].id;
-      //     const map_lat = result.maps[0].latitude;
-      //     const map_long = result.maps[0].longitude;
-      //     map.panTo([map_lat, map_long], zoom);
-      //   })
-      // })
     })
-
   };
 
 

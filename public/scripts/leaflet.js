@@ -51,8 +51,10 @@ $(() => {
       $nav.append($title, $descriptionDiv, $footer);
       $('div.pin_container').empty();
       $('div.pin_container').append($nav);
-      $('div.pin_details').removeClass('left_side') //animate this
+      $('div.pin_details').addClass('left_side') //animate this
       $('.toggle_button').removeClass('toggle_close').addClass('toggle_open')
+      // $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
+      // $('.toggle_button').toggleClass('toggle_close');
     })
     return marker;
   }
