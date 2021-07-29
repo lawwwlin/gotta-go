@@ -1,12 +1,30 @@
-//documentready
+
 $(() => {
-  const map = L.map('map', {
+  window.map = L.map('map', {
     center: [48.42959706075791, -123.34509764072138],
     zoom: 13
   })
 
+
   //set to user location
   map.locate({ setView: true, maxZoom: 15 })
+
+//use getUser(), use window.user
+  const userLocation = function(pin) {
+    $.get('/api/users/', (obj) => {
+      const user_id = obj.user_id;
+      $.get(`/api/users/${user_id}/location`, (obj) => {
+        const location = [obj.userData[0].latitude, obj.userData[0].longitude];
+        console.log("location in func: ", location);
+
+      })
+    });
+  };
+
+
+
+
+
 
   L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
@@ -14,12 +32,20 @@ $(() => {
 
   //const map1 = L.layerGroup([])
 
+  //set to true if create map is selected
+  const createMap = false;
+
+  const userDistance = (location) => {return map.distance(userLocation(), location)};
+  // console.log("userDistance([145, 90]): ", userDistance([145, 90]));
+
+
   function makePin(pin) {
-    const marker = L.marker([pin.latitude, pin.longitude])
-    const image = `<img src="${pin.image_url}">`
+    const marker = L.marker([pin.latitude, pin.longitude]);
+    const image = `<img src="${pin.image_url}">`;
     const title = pin.title;
     const description = pin.description;
-    marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${description}`);
+
+    marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> far away`);
     marker.on('click', function() {
       const $title = $('<header>', {'class': 'pin_title'}).text(title);
       const $img = $('<img>', {'class': 'image'}).attr('src', pin.image_url);
@@ -30,20 +56,19 @@ $(() => {
       const $rateButton = $('<button>', {'class': 'edit_pin'}).text('Rate Bathroom');
       const $editButton = $('<button>', {'class': 'edit_pin'}).text('edit pin').attr('hidden', true);
       const $addButton = $('<button>', {'class': 'add_pin'}).attr('hidden', true).text('report pin');
+      if (createMap){
+        $addButton.attr('hidden', false);
+      };
       $descriptionDiv.append($img, $description);
       $footer.append($rateButton, $editButton, $addButton);
       $nav.append($title, $descriptionDiv, $footer);
       $('div.pin_container').empty();
       $('div.pin_container').append($nav);
+      $('div.pin_details').removeClass('left_side') //animate this
+      $('.toggle_button').removeClass('toggle_close').addClass('toggle_open')
     })
     return marker;
   }
-
-  const renderPinDeets = function() {
-    $('nav.pin_bar').empty();
-    $
-  }
-
 
   //only load pins within radius
   function radiusCheck(pin, rad) {
@@ -55,7 +80,7 @@ $(() => {
       }
     }
   }
-
+  //add Pins to Map
   $.get('/api/pins', (obj) => {
     for (const pin of obj.pins) {
      makePin(pin).addTo(map)

@@ -41,6 +41,22 @@ module.exports = (db) => {
       });
   });
 
+  //retrieve user's location
+  router.get("/:id/location", (req, res) => {
+    console.log('/api/users/' + req.params.id);
+    const user_id = req.params.id;
+    db.query(`SELECT latitude, longitude FROM users WHERE id = $1;`, [user_id])
+      .then(data => {
+        const userData = data.rows;
+        res.json({userData});
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
   return router;
 };
 
