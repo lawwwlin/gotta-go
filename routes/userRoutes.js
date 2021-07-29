@@ -25,6 +25,25 @@ module.exports = (db) => {
       });
   });
 
+  // retrieve the current logged in user, if not logged in, return undefined
+  router.get("/me", (req, res) => {
+    console.log('/api/users/me');
+    if (!req.session.user_id) {
+      return res.json(undefined);
+    }
+    const user_id = req.session.user_id;
+    db.query(`SELECT * FROM users WHERE id = $1;`, [user_id])
+      .then(data => {
+        const user = data.rows[0];
+        res.json(user);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
   //retrieve user's maps
   router.get("/:id", (req, res) => {
     console.log('/api/users/' + req.params.id);
