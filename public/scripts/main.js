@@ -218,6 +218,7 @@ $(document).ready(function () {
         });
     });
 
+    // cancel button for createMap
     $form.on('click', '#cancelButton', () => {
       console.log('cancel button');
       renderNav();
@@ -246,7 +247,7 @@ $(document).ready(function () {
     <label for="latitude" class="pinlat" hidden></label><br>
     <label for="longitude" class="pinlng" hidden></label><br>
     <button class="submit_popup" type="submit" hidden>submit</button>
-    <button class="cancel">cancel</button>
+    <button type="button" class="cancel">cancel</button>
     </form> `);
 
     //clicking createPin button
@@ -286,26 +287,15 @@ $(document).ready(function () {
     //     });
     // });
 
-    $('button.cancel').on('click', function () {
+    $('.pin_container').on('click', '.cancel', function(e){
+      e.preventDefault();
       console.log('cancel clicked');
-      map.off('click', function(e) {
-        lat = e.latlng.lat;
-        lon = e.latlng.lng;
-        if (marker != undefined) {
-          map.removeLayer(marker);
-        };
-        marker=L.marker(e.latlng).addTo(window.map);
-        marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
-        $('p.submit_popup').hide();
-        $('button.submit_popup').show();
-        $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
-        $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
-      });
-      // stop this afterward
+      const $pin_bar = $('div.pin_container');
+      map.off();
+      // TODO: remove layer for temp pin
       $pin_bar.empty();
       $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
       $('.toggle_button').toggleClass('toggle_close');
-      map.removeLayer(marker);
     });
     //maybe some more code here
 
