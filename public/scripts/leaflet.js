@@ -4,7 +4,6 @@ $(() => {
     zoom: 13
   })
 
-  console.log('getUser(): ', getUser())
   getUser()
   updateUserLocation()
 
@@ -36,7 +35,6 @@ $(() => {
   const createMap = false;
 
   const userDistance = (location) => {return Math.round(map.distance(userLocation(), location))};
-  console.log("userDistance([145, 90]): ", userDistance([145, 90]));
 
 
   function makePin(pin) {
@@ -99,7 +97,6 @@ $(() => {
           makePin(pin);
         } else {
           map.remove(pin);
-          console.log('no pin in range')
         }
       }
     })
@@ -113,7 +110,6 @@ $(() => {
   $(elements).on('click', function () {
     const zoom = 14;
     const buttonID = (this.id);
-    console.log("ID = " + buttonID);
 
     $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
       const latitude = result.maps[0].latitude
