@@ -79,7 +79,7 @@ $(document).ready(function () {
       for (let i = 0; i < obj.maps.length; i++) {
         const map_name = obj.maps[i].name;
         const map_id = obj.maps[i].id;
-        const mapButton = $(`<div><button>${map_name}</button></div>`);
+        const mapButton = $(`<div><a href="#">${map_name}</a></div>`);
         $(mapButton).attr('id', `${map_id}`);
         mapButton.addClass('map-button');
         mapButton.appendTo(mapDiv);
@@ -271,7 +271,7 @@ $(document).ready(function () {
 
       <label for="longitude">Longitude:</label><br><br>
       <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
-      <button type="submit">submit</button>
+      <button type="submit" class="createButton">submit</button>
       </form> `);
 
       $('.sidebar footer').on('click', function () {
