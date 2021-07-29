@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 
+=======
+//documentready
+// we could move map outside of documnt.ready or do window.map
+
+
+//set to user location
+>>>>>>> test-merge
 $(() => {
   window.map = L.map('map', {
     center: [48.42959706075791, -123.34509764072138],
     zoom: 13
   })
+<<<<<<< HEAD
 
 
   //set to user location
@@ -26,9 +35,12 @@ $(() => {
 
 
 
+=======
+  map.locate({ setView: true, maxZoom: 15 })
+>>>>>>> test-merge
   L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-    }).addTo(map);
+  }).addTo(map);
 
   //const map1 = L.layerGroup([])
 
@@ -44,6 +56,7 @@ $(() => {
     const image = `<img src="${pin.image_url}">`;
     const title = pin.title;
     const description = pin.description;
+<<<<<<< HEAD
 
     marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> far away`);
     marker.on('click', function() {
@@ -59,6 +72,19 @@ $(() => {
       if (createMap){
         $addButton.attr('hidden', false);
       };
+=======
+    marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${description}`);
+    marker.on('click', function () {
+      const $title = $('<header>', { 'class': 'pin_title' }).text(pin.title);
+      const $img = $('<img>', { 'class': 'image' }).attr('src', pin.image_url);
+      const $description = $('<p>', { 'class': 'write_up' }).text(pin.description);
+      const $descriptionDiv = $('<div>', { 'class': 'description' });
+      const $nav = $('<nav>', { 'class': 'pin_bar' })
+      const $footer = $('<footer>')
+      const $editButton = $('button', { 'class': 'edit_pin' }).text('edit pin')
+      const $addButton = $('button', { 'class': 'add_pin' }).attr('hidden', true).text('report pin')
+
+>>>>>>> test-merge
       $descriptionDiv.append($img, $description);
       $footer.append($rateButton, $editButton, $addButton);
       $nav.append($title, $descriptionDiv, $footer);
@@ -70,12 +96,21 @@ $(() => {
     return marker;
   }
 
+<<<<<<< HEAD
+=======
+  const renderPinDeets = function () {
+    $('nav.pin_bar').empty();
+    $
+  }
+
+
+>>>>>>> test-merge
   //only load pins within radius
   function radiusCheck(pin, rad) {
-  const mapLng = map.getCenter().lng
-  const mapLat = map.getCenter().lat
-  if (mapLat - rad <= pin.latitude && pin.latitude <= mapLat + rad) {
-    if (mapLng - rad <= pin.longitude && pin.longitude <= mapLng + rad){
+    const mapLng = map.getCenter().lng
+    const mapLat = map.getCenter().lat
+    if (mapLat - rad <= pin.latitude && pin.latitude <= mapLat + rad) {
+      if (mapLng - rad <= pin.longitude && pin.longitude <= mapLng + rad) {
         return true;
       }
     }
@@ -83,7 +118,7 @@ $(() => {
   //add Pins to Map
   $.get('/api/pins', (obj) => {
     for (const pin of obj.pins) {
-     makePin(pin).addTo(map)
+      makePin(pin).addTo(map)
     }
   });
 
@@ -119,4 +154,6 @@ $(() => {
       map.panTo([latitude, longitude], zoom);
     })
   })
+
+  //################################################################## maps stuff ##################################################################
 });

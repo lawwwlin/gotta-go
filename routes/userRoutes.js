@@ -25,11 +25,30 @@ module.exports = (db) => {
       });
   });
 
+  // retrieve the current logged in user, if not logged in, return undefined
+  router.get("/me", (req, res) => {
+    console.log('/api/users/me');
+    if (!req.session.user_id) {
+      return res.json({latitude: 49.260833, longitude: -123.113889});
+    }
+    const user_id = req.session.user_id;
+    db.query(`SELECT * FROM users WHERE id = $1;`, [user_id])
+      .then(data => {
+        const user = data.rows[0];
+        res.json(user);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
   //retrieve user's maps
   router.get("/:id", (req, res) => {
     console.log('/api/users/' + req.params.id);
     const user_id = req.params.id;
-    db.query(`SELECT users.*, maps.* FROM users JOIN maps ON creator_id = users.id WHERE creator_id = $1;`, [user_id])
+    db.query(`SELECT users.id as user_id, username, password, users.latitude as user_lat, users.longitude as user_long, maps.id as map_id, creator_id, name as map_name, maps.latitude as map_lat, maps.longitude as map_long FROM users JOIN maps ON creator_id = users.id WHERE creator_id = $1;`, [user_id])
       .then(data => {
         const userData = data.rows;
         res.json({userData});
@@ -41,11 +60,14 @@ module.exports = (db) => {
       });
   });
 
-  //retrieve user's location
-  router.get("/:id/location", (req, res) => {
+  //edit user's location
+  router.patch("/:id", (req, res) => {
     console.log('/api/users/' + req.params.id);
     const user_id = req.params.id;
-    db.query(`SELECT latitude, longitude FROM users WHERE id = $1;`, [user_id])
+    const { latitude, longitude } = req.body;
+    console.log('req.bod', req.body);
+    console.log('patch, lat:', latitude, 'long:', longitude);
+    db.query(`UPDATE users SET latitude = $1, longitude = $2 WHERE id = $3 RETURNING *;`, [latitude, longitude, user_id])
       .then(data => {
         const userData = data.rows;
         res.json({userData});
