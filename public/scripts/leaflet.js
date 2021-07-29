@@ -41,11 +41,10 @@ $(() => {
 
   function makePin(pin) {
     const marker = L.marker([pin.latitude, pin.longitude]);
-    const image = `<img src="${pin.image_url}">`;
     const title = pin.title;
     const description = pin.description;
     //create popup
-    marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${userDistance([pin.latitude, pin.longitude])}m away`);
+    marker.bindPopup(`<h3> ${title} </h3> <br> ${userDistance([pin.latitude, pin.longitude])}m away`);
     //behaviour for when marker is clicked
     marker.on('click', function() {
       const $title = $('<header>', {'class': 'pin_title'}).text(title);
