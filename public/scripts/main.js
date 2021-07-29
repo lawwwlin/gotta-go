@@ -1,7 +1,7 @@
 // define a default user location at Vancouver
-window.user = {latitude: 49.260833, longitude: -123.113889};
+window.user = { latitude: 49.260833, longitude: -123.113889 };
 
-$(document).ready(function() {
+$(document).ready(function () {
 
   /* get current logged in user object from the users table and set it to global variable
   which includes id, username, password, latitue, longitude */
@@ -17,7 +17,7 @@ $(document).ready(function() {
   const makeUserPin = (lat, long, content) => {
     const latlng = L.latLng(lat, long);
     const myIcon = L.icon({
-      iconUrl: src='/images/poop.png',
+      iconUrl: src = '/images/poop.png',
       iconSize: [38, 38],
       iconAnchor: [20, 20],
       popupAnchor: [0, -15]
@@ -30,25 +30,25 @@ $(document).ready(function() {
 
   const updateUserLocation = () => {
     window.map.locate({ setView: true, maxZoom: 15 })
-    .on('locationfound', function(e) {
-      window.user.latitude = e.latitude;
-      window.user.longitude = e.longitude;
-      const radius = e.accuracy / 2;
-      makeUserPin(e.latitude, e.longitude, `<p>You are within ${radius} meters from this point</p>`);
-      L.circle(e.latlng, radius).addTo(window.map);
-      if (userIsLoggedIn()) {
-        setUserLocation(window.user);
-      }
-    })
-    // if location not found or blocked
-    .on('locationerror', function(e) {
-      console.log('location blocked, user lat:', window.user.latitude, 'long:', window.user.longitude);
-      if (userIsLoggedIn()) {
-        makeUserPin(window.user.latitude, window.user.longitude, `<p>Your last location was here</p>`);
-      } else {
-        makeUserPin(window.user.latitude, window.user.longitude, `<p>No location found, default to Vancouver City Hall</p>`);
-      }
-    });
+      .on('locationfound', function (e) {
+        window.user.latitude = e.latitude;
+        window.user.longitude = e.longitude;
+        const radius = e.accuracy / 2;
+        makeUserPin(e.latitude, e.longitude, `<p>You are within ${radius} meters from this point</p>`);
+        L.circle(e.latlng, radius).addTo(window.map);
+        if (userIsLoggedIn()) {
+          setUserLocation(window.user);
+        }
+      })
+      // if location not found or blocked
+      .on('locationerror', function (e) {
+        console.log('location blocked, user lat:', window.user.latitude, 'long:', window.user.longitude);
+        if (userIsLoggedIn()) {
+          makeUserPin(window.user.latitude, window.user.longitude, `<p>Your last location was here</p>`);
+        } else {
+          makeUserPin(window.user.latitude, window.user.longitude, `<p>No location found, default to Vancouver City Hall</p>`);
+        }
+      });
   };
 
   // patch via ajax current logged in user latitude and longitude in the users table
@@ -181,6 +181,13 @@ $(document).ready(function() {
                 pinButton.appendTo($('.sidebar'));
               }
             })
+              .then(() => {
+                const $backButton = $('</br><button>back</button>')
+                $backButton.appendTo($('.sidebar'))
+                $($backButton).on('click', function () {
+                  location.reload(); //change to load up functions post refactor
+                })
+              })
           })
         })
 
@@ -268,9 +275,9 @@ $(document).ready(function() {
       </form> `);
 
       $('.sidebar footer').on('click', function () {
-      const $sidebar = $('.sidebar');
-      $sidebar.empty();
-      $form.appendTo($sidebar);
+        const $sidebar = $('.sidebar');
+        $sidebar.empty();
+        $form.appendTo($sidebar);
       });
 
       $form.submit((event) => {
