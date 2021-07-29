@@ -99,16 +99,8 @@ $(() => {
   //################################################################## maps stuff ###################################################################
 
   $.get('/api/users', (obj) => {
-    // console.log('side-bar.js', obj);
     for (const user of obj.users) {
-      // console.log(user.username);
     }
-
-    // <header>user:</header>
-    // <div>
-    //   <h3>User maps</h3>
-    //   <div class='mapButtons'></div>
-    // </div>
     const $userMaps = $(`<header>user not logged in</header>
     <div>
       <h3>User maps</h3>
@@ -134,7 +126,7 @@ $(() => {
         $.get(`/api/users/`, (obj) => { });
 
         $(".sidebar header").text(`user: ${username}`);
-        const $createButton = $('<footer><button>create map</button></footer>');
+        const $createButton = $('<footer><a href="#" class="createButton">create map</a></footer>');
         $createButton.appendTo($('.sidebar'));
         console.log('create button', $createButton);
 
@@ -168,7 +160,7 @@ $(() => {
         for (let i = 0; i < obj.userData.length; i++) {
           const map_name = obj.userData[i].map_name;
           const map_id = obj.userData[i].map_id;
-          const $mapButton = $(`<div><button>${map_name}</button></div>`);
+          const $mapButton = $(`<div><a href="#">${map_name}</a></div></br>`);
           $($mapButton).attr('id', `${map_id}`);
           $mapButton.addClass('map-button');
           $mapButton.appendTo(mapDiv);
@@ -216,7 +208,7 @@ $(() => {
           for (let i = 0; i < obj.length; i++) {
             const map = obj[i].map_id
             console.log(`map: ${map}`)
-            const $faveMapButton = $(`<div><button>${map}</button></div>`);
+            const $faveMapButton = $(`<div><a href="#">${map}</a></div></br>`);
             $($faveMapButton).attr('id', `${map}`);
             $faveMapButton.addClass('map-button');
             $faveMapButton.appendTo(mapDiv);
