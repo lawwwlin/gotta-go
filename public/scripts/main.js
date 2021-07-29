@@ -234,21 +234,20 @@ $(document).ready(function () {
     //form submit for creating pins
     const $pinform = $(`<form>
     <input type="hidden" name="creator_id" value="${user_id}" />
-
     <label for="title">Pin Name:</label><br><br>
-    <input type="text" name="name" id="name" placeholder="New Pin" /><br><br>
-
+    <input type="text" name="title" id="name" placeholder="New Pin" /><br><br>
     <label for="description">Description:</label><br><br>
-    <input type="text" name="latitude" id="latitude" placeholder="48.2827" /><br><br>
-
+    <textarea type="text" name="description" placeholder="description" /><br><br>
     <label for="img_url">Image URL:</label><br><br>
-    <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
+    <input type="text" name="image_url" id="longitude" placeholder="image url" /><br><br>
     <p class="submit_popup">Please click on the map where you would like to create your pin.</p>
     <label for="latitude" class="pinlat" hidden></label><br>
+    <input type="text" class="pinlat" name="latitude" hidden />
     <label for="longitude" class="pinlng" hidden></label><br>
+    <input type="text" class="pinlng" name="longitude" hidden/>
     <button class="submit_popup" type="submit" hidden>submit</button>
-    <button type="button" class="cancel">cancel</button>
-    </form> `);
+    <button class="cancel" type="cancel">cancel</button>
+    </form>`);
 
     //clicking createPin button
     $('.sidebar').on('click', '.createPin', function() {
@@ -274,18 +273,22 @@ $(document).ready(function () {
       });
     })
 
-    //     WIP
-    // $pinform.submit((event) => {
-    //   event.preventDefault();
-    //   const data = $pinform.serialize();
-    //   $.post(`/api/pins/`, data)
-    //     .then(() => {
-    //       console.log(data);
-    //       $.get(`/api/users/${user_id}`, (obj) => {
-    //         location.reload();
-    //       });
-    //     });
-    // });
+    // WIP
+    $pinform.submit((event) => {
+      event.preventDefault();
+      const data = $pinform.serialize();
+      console.log(data);
+      $.post(`/api/pins/`, data)
+        .then(() => {
+          $.get(`/api/users/${user_id}`, (obj) => {
+            $.get('/api/pins', (obj) => {
+              for (const pin of obj.pins) {
+                makePin(pin).addTo(map)
+              }
+            });
+          });
+        });
+    });
 
     $('.pin_container').on('click', '.cancel', function(e){
       e.preventDefault();
