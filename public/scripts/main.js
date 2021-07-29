@@ -152,8 +152,14 @@ $(document).ready(function () {
 
       // update sidebar username
       $(".sidebar header").text(`user: ${username}`);
+
+      // make create map button
       const $createButton = $('<footer><button class="createMap">create map</button></footer>');
       $createButton.appendTo($('.sidebar'));
+
+      // make create pin button
+      const $createPin = $('<div><button class="createPin">create pin</button></div>');
+      $createPin.appendTo($createButton);
 
       const mapDiv = $(".mapButtons");
 
@@ -212,11 +218,93 @@ $(document).ready(function () {
         });
     });
 
-
     $form.on('click', '#cancelButton', () => {
       console.log('cancel button');
       renderNav();
     });
+
+
+
+    //WIP
+    // $('button.cancel').on('click', function () {
+    //   $sidebar.empty()
+    // })
+
+    //form submit for creating pins
+    const $pinform = $(`<form>
+    <input type="hidden" name="creator_id" value="${user_id}" />
+
+    <label for="title">Pin Name:</label><br><br>
+    <input type="text" name="name" id="name" placeholder="New Pin" /><br><br>
+
+    <label for="description">Description:</label><br><br>
+    <input type="text" name="latitude" id="latitude" placeholder="48.2827" /><br><br>
+
+    <label for="img_url">Image URL:</label><br><br>
+    <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
+    <p class="submit_popup">Please click on the map where you would like to create your pin.</p>
+    <label for="latitude" class="pinlat" hidden></label><br>
+    <label for="longitude" class="pinlng" hidden></label><br>
+    <button class="submit_popup" type="submit" hidden>submit</button>
+    <button class="cancel">cancel</button>
+    </form> `);
+
+    //change button layout
+    $('.sidebar').on('click', '.createPin', function() {
+      const $pin_bar = $('div.pin_container');
+      $pin_bar.empty();
+      $pin_bar.append($pinform);
+      let marker = {};
+
+      map.on('click', function(e) {
+        lat = e.latlng.lat;
+        lon = e.latlng.lng;
+        if (marker != undefined) {
+          map.removeLayer(marker);
+        };
+        marker=L.marker(e.latlng).addTo(window.map);
+        marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
+        $('p.submit_popup').hide();
+        $('button.submit_popup').show();
+        $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
+        $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
+      });
+    })
+
+    //     WIP
+    // $pinform.submit((event) => {
+    //   event.preventDefault();
+    //   const data = $pinform.serialize();
+    //   $.post(`/api/pins/`, data)
+    //     .then(() => {
+    //       console.log(data);
+    //       $.get(`/api/users/${user_id}`, (obj) => {
+    //         location.reload();
+    //       });
+    //     });
+    // });
+
+    $('button.cancel').on('click', function () {
+      map.off('click', function(e) {
+        lat = e.latlng.lat;
+        lon = e.latlng.lng;
+        if (marker != undefined) {
+          map.removeLayer(marker);
+        };
+        marker=L.marker(e.latlng).addTo(window.map);
+        marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
+        $('p.submit_popup').hide();
+        $('button.submit_popup').show();
+        $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
+        $('label.pinlng').show().text(`longitude: ${e.latlng.lng}`)
+      });
+      $pin_bar.empty();
+      $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
+      $('.toggle_button').toggleClass('toggle_close');
+      map.removeLayer(marker);
+    });
+    //maybe some more code here
+
 
     //favourite map buttons
     $.get(`/api/faveMaps/${user_id}`, (obj) => {
