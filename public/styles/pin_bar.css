@@ -1,21 +1,6 @@
 div.pin_details{
   float:left;
-}
-
-button.toggle_button {
-  float: right;
-  background-color: transparent;
-  color: black;
-  border: none;
-  cursor: pointer;
-  z-index: 100;
-  font-size: large;
-}
-
-img.image {
-  width: 28vw;
-  height: auto;
-  padding: 0.05vw;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .toggle_button:hover {
@@ -36,20 +21,43 @@ img.image {
   align-items: center;
 }
 
+button.toggle_button {
+  float: right;
+  background-color: transparent;
+  color: black;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+  font-size: large;
+}
+
+/* pin nav content styling */
+img.image {
+  width: 50vh;
+  height: auto;
+  padding: 0.3em;
+}
+
+.pin_title {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  padding: 1.4em;
+  font-size: 20px;
+}
+
 .sidebar header {
   text-align: left;
 }
 
 div.pin_container {
-  float: left;
-  color: whitesmoke;
-  background-color: orange;
+  display:flex;
+  overflow:auto;
+  justify-content: left;
+  color: black;
+  background-color: white;
   width: 30vw;
-  height: 100vh;
-  padding: 1vw;
-  margin-right: 0;
+  height: 70vh;
   transition: 0.8 all;
-  overflow: auto;
+  border-radius: 2em;
 }
 
 .left_side {

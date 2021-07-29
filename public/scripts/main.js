@@ -126,18 +126,9 @@ $(document).ready(function () {
 
         $.get(`/api/users/`, (obj) => { });
 
-        // <div class="favourites">
-        //   <h3>Favourited Maps</h3>
-        //   <ul>Map2</ul>
-        // </div>
-        // <footer>
-        //   <button>create map</button>
-        //   <button>create pin</button>
-        // </footer>
+        $(".sidebar header").text(`Welcome back, ${username}!`);
 
-
-        $(".sidebar header").text(`user: ${username}`);
-        const $createButton = $('<footer><button>create map</button></footer>');
+        const $createButton = $('<footer><a href="#" class="createButton">create map</a></footer>');
         $createButton.appendTo($('.sidebar'));
         console.log('create button', $createButton);
 
@@ -149,7 +140,7 @@ $(document).ready(function () {
         for (let i = 0; i < obj.userData.length; i++) {
           const map_name = obj.userData[i].map_name;
           const map_id = obj.userData[i].map_id;
-          const $mapButton = $(`<div><button>${map_name}</button></div>`);
+          const $mapButton = $(`<div><a href="#" style="text-decoration:none;">${map_name}</a></div></br>`);
           $($mapButton).attr('id', `${map_id}`);
           $mapButton.addClass('map-button');
           // console.log('map button:', mapButton);
@@ -176,8 +167,8 @@ $(document).ready(function () {
               console.log(`get map-pins: ${obj}`)
               for (let i = 0; i < obj.length; i++) {
                 const pin_id = obj[i].pin_id;
-                const pinButton = $(`<div><button>${pin_id}</button></div>`);
-                $(pinButton).attr('id', `${pin_id}`);
+                const pinButton = $(`<div><a href="#" style="text-decoration:none;">${pin_id}</a></div></br>`);
+                $(pinButton).addClass('pin-buttons');
                 pinButton.appendTo($('.sidebar'));
               }
             })
@@ -202,7 +193,7 @@ $(document).ready(function () {
 
             <label for="longitude">Longitude:</label><br><br>
             <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
-            <button type="submit">submit</button>
+            <button type="a href="#"">submit</a>
           </form> `);
 
         $('.sidebar footer').on('click', function () {
@@ -224,8 +215,6 @@ $(document).ready(function () {
         });
       });
 
-
-
       //favourite map buttons
       $.get(`/api/faveMaps/${user_id}`, (obj) => {
         const mapDiv = $(".mapButtons");
@@ -235,22 +224,19 @@ $(document).ready(function () {
         $faveMapNav.appendTo(mapDiv)
         for (let i = 0; i < obj.length; i++) {
           const map = obj[i].map_id
-          console.log(`map: ${map}`)
-          const $faveMapButton = $(`<div><button>${map}</button></div>`);
+          const $faveMapButton = $(`<div><a href="#" style="text-decoration:none;">${map}</a></div></br>`);
           $($faveMapButton).attr('id', `${map}`);
-          $faveMapButton.addClass('fav-map-button');
+          $faveMapButton.addClass('map-button');
           $faveMapButton.appendTo(mapDiv);
-
         }
 
         //on click will zoom to map area
-        $('.fav-map-button').on('click', function () {
+        $('.map-button').on('click', function () {
           const zoom = 14;
           const buttonID = $(this).attr('id');
           console.log("button ID = " + buttonID);
 
           $.getJSON(`http://localhost:8080/api/maps/${buttonID}`, function (result) {
-            //console.log('result', result);
             const map_id = result.maps[0].id;
             const map_lat = result.maps[0].latitude;
             const map_long = result.maps[0].longitude;
@@ -271,7 +257,7 @@ $(document).ready(function () {
 
       <label for="longitude">Longitude:</label><br><br>
       <input type="text" name="longitude" id="longitude" placeholder="-124.1207" /><br><br>
-      <button type="submit" class="createButton">submit</button>
+      <button type="submit">submit</button>
       </form> `);
 
       $('.sidebar footer').on('click', function () {
