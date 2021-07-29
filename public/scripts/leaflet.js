@@ -1,43 +1,30 @@
-<<<<<<< HEAD
-
-=======
-//documentready
-// we could move map outside of documnt.ready or do window.map
-
-
-//set to user location
->>>>>>> test-merge
 $(() => {
   window.map = L.map('map', {
     center: [48.42959706075791, -123.34509764072138],
     zoom: 13
   })
-<<<<<<< HEAD
 
+  console.log('getUser(): ', getUser())
+  getUser()
 
   //set to user location
   map.locate({ setView: true, maxZoom: 15 })
+  // console.log(getUser())
+  //use getUser(), use window.user
+  const userLocation = function() {
+    const userCoords = [window.user.latitude, window.user.longitude];
+    return userCoords
 
-//use getUser(), use window.user
-  const userLocation = function(pin) {
-    $.get('/api/users/', (obj) => {
-      const user_id = obj.user_id;
-      $.get(`/api/users/${user_id}/location`, (obj) => {
-        const location = [obj.userData[0].latitude, obj.userData[0].longitude];
-        console.log("location in func: ", location);
-
-      })
-    });
+    // $.get('/api/users/', (obj) => {
+    //   const user_id = obj.user_id;
+    //   $.get(`/api/users/${user_id}/location`, (obj) => {
+    //     const location = [obj.userData[0].latitude, obj.userData[0].longitude];
+    //     console.log("location in func: ", location);
+    //   })
+    // });
   };
 
 
-
-
-
-
-=======
-  map.locate({ setView: true, maxZoom: 15 })
->>>>>>> test-merge
   L.tileLayer('https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=IWRRuvOlBlyhZTVNm8VO', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
   }).addTo(map);
@@ -47,8 +34,8 @@ $(() => {
   //set to true if create map is selected
   const createMap = false;
 
-  const userDistance = (location) => {return map.distance(userLocation(), location)};
-  // console.log("userDistance([145, 90]): ", userDistance([145, 90]));
+  const userDistance = (location) => {return Math.round(map.distance(userLocation(), location))};
+  console.log("userDistance([145, 90]): ", userDistance([145, 90]));
 
 
   function makePin(pin) {
@@ -56,9 +43,9 @@ $(() => {
     const image = `<img src="${pin.image_url}">`;
     const title = pin.title;
     const description = pin.description;
-<<<<<<< HEAD
-
-    marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> far away`);
+    //create popup
+    marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${userDistance([pin.latitude, pin.longitude])}m away`);
+    //behaviour for when marker is clicked
     marker.on('click', function() {
       const $title = $('<header>', {'class': 'pin_title'}).text(title);
       const $img = $('<img>', {'class': 'image'}).attr('src', pin.image_url);
@@ -72,19 +59,6 @@ $(() => {
       if (createMap){
         $addButton.attr('hidden', false);
       };
-=======
-    marker.bindPopup(`${image} <br> <h3> ${title} </h3> <br> ${description}`);
-    marker.on('click', function () {
-      const $title = $('<header>', { 'class': 'pin_title' }).text(pin.title);
-      const $img = $('<img>', { 'class': 'image' }).attr('src', pin.image_url);
-      const $description = $('<p>', { 'class': 'write_up' }).text(pin.description);
-      const $descriptionDiv = $('<div>', { 'class': 'description' });
-      const $nav = $('<nav>', { 'class': 'pin_bar' })
-      const $footer = $('<footer>')
-      const $editButton = $('button', { 'class': 'edit_pin' }).text('edit pin')
-      const $addButton = $('button', { 'class': 'add_pin' }).attr('hidden', true).text('report pin')
-
->>>>>>> test-merge
       $descriptionDiv.append($img, $description);
       $footer.append($rateButton, $editButton, $addButton);
       $nav.append($title, $descriptionDiv, $footer);
@@ -96,15 +70,12 @@ $(() => {
     return marker;
   }
 
-<<<<<<< HEAD
-=======
   const renderPinDeets = function () {
     $('nav.pin_bar').empty();
     $
   }
 
 
->>>>>>> test-merge
   //only load pins within radius
   function radiusCheck(pin, rad) {
     const mapLng = map.getCenter().lng
