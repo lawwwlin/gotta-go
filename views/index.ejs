@@ -1,58 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Home Page</title>
+
+<head>
+  <title>Home Page</title>
 
 
-    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/side_bar.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/map.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/pin_bar.css" type="text/css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/side_bar.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/map.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/pin_bar.css" type="text/css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxygen&display=swap" rel="stylesheet">
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script type="text/javascript" src="/scripts/helpers.js"></script>
-    <script type="text/javascript" src="/scripts/leaflet.js"></script>
-    <script type="text/javascript" src="/scripts/main.js"></script>
-    <script type="text/javascript" src="/scripts/toggle-nav.js"></script>
-  </head>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script type="text/javascript" src="/scripts/helpers.js"></script>
+  <script type="text/javascript" src="/scripts/leaflet.js"></script>
+  <script type="text/javascript" src="/scripts/main.js"></script>
+  <script type="text/javascript" src="/scripts/toggle-nav.js"></script>
+</head>
 
-  <div id="map"></div>
-  <div id="map_selections">
+<body>
+<!-- user nav bar -->
+<div id="map"></div>
+<div id="map_selections">
   <div class='nav'>
     <button class='nav-button1'></button>
-    <nav class="sidebar">
+    <nav class='left-nav'>
+      <div class='header'>
+        <h2> WIKI MAPS </h2>
+        <img src='./images/world2.png' id="globe"></img>
+      </div>
+      <div class='sidebar'>
       <header>User not logged in</header>
       <h3></h3>>
-      <div>
-        <div class='mapButtons'></div>
-      </div>
+      <div class='mapButtons'></div>
+    </div>
     </nav>
   </div>
 </div>
 
-  <div class="pin_details">
-    <button class='toggle_button'></button>
-    <div class="pin_container">
+<!-- pin nav bar -->
+<div class="pin_details">
+  <button class='toggle_button'></button>
+  <div class="pin_container">
     <nav class="pin_bar"></nav>
-      <header class="pin_title"></header>
-      <div class="description">
-      <img class="image" src= >
-      <p class="write_up"></p>
-        <footer>
-          <button>edit pin</button>
-          <button>report pin</button>
-          <button class="add_to_map" hidden>add pin to map</button>
-        </footer>
-      </nav>
-      </div>
-    </div>
+    <header class="pin_title"></header>
+    <div class="description"></div>
+    <img class="image" src=></img>
+    <p class="write_up"></p>
+    <footer>
+      <button>edit pin</button>
+      <button>report pin</button>
+      <button class="add_to_map" hidden>add pin to map</button>
+    </footer>
+    </nav>
+  </div>
+</div>
 
-  </body>
+</body>
 
 </html>

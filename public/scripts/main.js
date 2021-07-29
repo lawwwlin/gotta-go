@@ -1,3 +1,6 @@
+// ***** TODO: make onclick function for pins
+
+
 // define a default user location at Vancouver
 window.user = { latitude: 49.260833, longitude: -123.113889 };
 
@@ -70,7 +73,7 @@ $(document).ready(function () {
       for (let i = 0; i < obj.maps.length; i++) {
         const map_name = obj.maps[i].name;
         const map_id = obj.maps[i].id;
-        const mapButton = $(`<div>${map_name}</div>`);
+        const mapButton = $(`<div>${map_name}</div><br>`);
         $(mapButton).attr('id', `${map_id}`);
         mapButton.addClass('map-button');
         mapButton.appendTo(mapDiv);
@@ -89,17 +92,19 @@ $(document).ready(function () {
       const map_id = result.maps[0].id;
       const map_lat = result.maps[0].latitude;
       const map_long = result.maps[0].longitude;
+      const map_name = result.maps[0].name;
       map.panTo([map_lat, map_long], zoom);
       const $sidebar = $('.sidebar');
       $sidebar.empty();
 
       $.get(`/api/mapPins/${map_id}`, (obj) => {
-        console.log(`get map-pins: ${obj}`)
+        const $h3 = $(`<div><h3>Pins for ${map_name}</h3></div><br>`);
+        $h3.appendTo($('.sidebar'));
         for (let i = 0; i < obj.length; i++) {
-          const pin_id = obj[i].pin_id;
-          const pinButton = $(`<div><button>${pin_id}</button></div>`);
+          const {pin_id, title, latitude, longitude} = obj[i];
+          const pinButton = $(`<div class='pinButtons'>${title} @${latitude}, ${longitude}</div><br>`);
           $(pinButton).attr('id', `${pin_id}`);
-          pinButton.appendTo($('.sidebar'));
+          pinButton.appendTo($h3);
         }})
       .then(() => {
         const $backButton = $('</br><button>back</button>')
@@ -112,12 +117,12 @@ $(document).ready(function () {
   });
 
 
-  const renderNav = () => {
+  const renderNavLoggedIn = () => {
     const user_id = window.user.id;
     $('.sidebar').empty();
     const $userMaps = $(`<header>user not logged in</header>
       <div>
-        <h3>User maps</h3>
+        <h3>User Maps</h3>
         <div class='mapButtons'></div>
       </div>`);
     $userMaps.appendTo($('.sidebar'));
@@ -125,22 +130,18 @@ $(document).ready(function () {
       console.log(`user ${user_id}`, obj);
       console.log(`username`, obj.userData[0].username);
       username = obj.userData[0].username;
-      user_lat = obj.userData[0].user_lat;
-      user_long = obj.userData[0].user_long;
 
       // update sidebar username
       $(".sidebar header").text(`user: ${username}`);
       const $createButton = $('<footer><button class="createMap">create map</button></footer>');
       $createButton.appendTo($('.sidebar'));
 
-      updateUserLocation();
-
       const mapDiv = $(".mapButtons");
 
       for (let i = 0; i < obj.userData.length; i++) {
         const map_name = obj.userData[i].map_name;
         const map_id = obj.userData[i].map_id;
-        const $mapButton = $(`<div><button>${map_name}</button></div>`);
+        const $mapButton = $(`<div>${map_name}</div><br>`);
         $($mapButton).attr('id', `${map_id}`);
         $mapButton.addClass('map-button');
         // console.log('map button:', mapButton);
@@ -164,7 +165,7 @@ $(document).ready(function () {
           <label for="longitude">Longitude:</label><br><br>
           <input type="text" name="longitude" id="longitude" placeholder="-123.113889" /><br><br>
           <span></span> <br><br>
-          <button type="submit" value="Submit">submit</button>
+          <button type="submit" id="submitButton" value="Submit">submit</button>
           <button type="button" id="cancelButton">Cancel</button>
         </form> `);
 
@@ -195,10 +196,7 @@ $(document).ready(function () {
 
       $form.on('click', '#cancelButton', () => {
         console.log('cancel button');
-        getUser(() => {
-          console.log('user is logged in');
-          renderNav();
-        });
+        renderNav();
       });
 
     //favourite map buttons
@@ -211,7 +209,7 @@ $(document).ready(function () {
       console.log('fav maps:', obj);
       for (let i = 0; i < obj.length; i++) {
         const {id, name, username} = obj[i];
-        const $faveMapButton = $(`<div><button>${name}</button><br>created by: ${username}</div><br>`);
+        const $faveMapButton = $(`<div>${name}<br>created by: ${username}</div><br>`);
         $($faveMapButton).attr('id', `${id}`);
         $faveMapButton.addClass('map-button');
         $faveMapButton.appendTo(mapDiv);
@@ -249,10 +247,14 @@ $(document).ready(function () {
   };
 
   getUser(() => {
-    // if user is logged in
+    renderNav();
+  });
+
+  const renderNav = () => {
     if (userIsLoggedIn()) {
       console.log('user is logged in');
-      renderNav();
+      updateUserLocation();
+      renderNavLoggedIn();
     } else {
       console.log('usr is not logged in');
       const $sidebar = $('.sidebar');
@@ -266,9 +268,5 @@ $(document).ready(function () {
       updateUserLocation();
       getMapNearUserLocation();
     }
-  });
-
-
-
-
+  };
 });
