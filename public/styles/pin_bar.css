@@ -31,16 +31,25 @@ button.toggle_button {
   font-size: large;
 }
 
+.left_side {
+  margin-left: -30vw;
+  transition: 0.8 all;
+}
+
 /* pin nav content styling */
 img.image {
-  width: 50vh;
+  width: 28vw;
   height: auto;
-  padding: 0.3em;
+  padding: 0.5em;
+  display:flex;
+  justify-content: center;
+  align-content: center;
 }
 
 .pin_title {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  padding: 1.4em;
+  margin-top: 1.4em;
+  margin-left: 1.3em;
   font-size: 20px;
 }
 
@@ -49,18 +58,40 @@ img.image {
 }
 
 div.pin_container {
+ /* nav bar on right style */
+ /*float: right;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: white;
+  background-color: #013220;
+  width: 30vw;
+  height: 100vh;
+  padding: 1.3em;
+  margin-right: 0;
+  transition: 0.8 all; */
+
+/* smaller floating style */
   display:flex;
   overflow:auto;
+  align-self:center;
   justify-content: left;
-  color: black;
-  background-color: white;
+  color: white;
+  background-color: #013220;;
   width: 30vw;
   height: 70vh;
   transition: 0.8 all;
-  border-radius: 2em;
+  border-radius: 3em;
 }
 
-.left_side {
-  margin-left: -30vw;
-  transition: 0.8 all;
+ .write_up {
+  display:flex;
+  justify-content: center;
+  border-top: 2px black solid;
+  padding-top: 1em;
 }
+
+.edit_pin{
+  color:blue;
+  margin-left:38%
+
+}
+
