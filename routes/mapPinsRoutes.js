@@ -4,7 +4,6 @@ const router = express.Router();
 module.exports = (db) => {
   //retrieve pins for specific map in database
   router.get("/:id", (req, res) => {
-    //    console.log('/api/mapPins');
     const map_id = req.params.id;
     db.query(`SELECT pins.*
       FROM map_pins
@@ -12,7 +11,6 @@ module.exports = (db) => {
       WHERE map_id = $1;`, [map_id])
       .then(data => {
         const mapPins = data.rows;
-        console.log(mapPins)
         res.json(mapPins);
       })
       .catch(err => {
@@ -23,14 +21,15 @@ module.exports = (db) => {
   });
 
   //add map
-  router.post("/", (req, res) => {
-    const { map_id, pin_id } = req.body;
-    console.log('post /api/mapPins req.body:', req.body);
-    db.query(`INSERT INTO map_pins (map_id, pin_id) VALUES ($1, $2) RETURNING *;`, [map_id, pin_id])
+  router.post("/:map_id", (req, res) => {
+    const map_id = req.params.map_id;
+    const id = req.body;
+    console.log('id from req.body id:', id.pinID);
+    db.query(`INSERT INTO map_pins (map_id, pin_id) VALUES ($1, $2) RETURNING *;`, [map_id, id.pinID])
       .then(data => {
         const mapPins = data.rows[0];
         res
-          .json({ mapPins });
+          .json(mapPins);
       })
       .catch(err => {
         res

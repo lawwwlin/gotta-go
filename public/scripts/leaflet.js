@@ -57,6 +57,25 @@ $(() => {
     }
   }
 
+  // get all pins
+  const getAllPins = () => {
+    map.eachLayer(function (layer) {
+      if (layer.map_id) {
+        map.removeLayer(layer);
+      }
+    });
+    // map.removeLayer(window.allPins);
+    $.get('/api/pins/', (obj) => {
+      window.allPins = L.layerGroup();
+      for (const pin of obj.pins) {
+        const temp = makePin(pin);
+        temp.addTo(allPins);
+      }
+      window.allPins.addTo(window.map);
+    });
+  };
+  getAllPins();
+
   // map: {{mapleLayer1: [marker1, marker 2]}, {mapleLayer2: [marker1, marker 2]}, {mapleLayer3: [marker1, marker 2]}}
   // add layers to Map
   $.get(`/api/maps/`, (maps) => {
@@ -76,14 +95,9 @@ $(() => {
         for (const i in pins) {
           const pin = pins[i];
           const tempPin = makePin(pin);
-          console.log('tempPin', tempPin);
           tempPin.addTo(mapLayer);
-          console.log('added 1 pin to mapLayer', mapLayer.getLayers());
         }
         mapLayer.addTo(window.mapLayers);
-        console.log(`finished adding pins to map ${map_id}:}`)
-        console.log(mapLayer.getLayers())
-        console.log('current mapLayers', window.mapLayers.getLayers())
       });
     }
   });
