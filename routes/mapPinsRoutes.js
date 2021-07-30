@@ -39,11 +39,12 @@ module.exports = (db) => {
   });
 
   //delete map
-  router.delete("/:id", (req, res) => {
-    const values = req.params.id;
-    db.query(`DELETE FROM map_pins WHERE id = $1;`, [values])
+  router.delete("/:pin_id/:map_id", (req, res) => {
+    const {pin_id, map_id} = req.params;
+    console.log('inside route deleting', pin_id, map_id)
+    db.query(`DELETE FROM map_pins WHERE pin_id = $1 AND map_id = $2;`, [pin_id, map_id])
       .then(data => {
-        res.json({ success: true });
+        res.json(map_id);
       })
       .catch(err => {
         res

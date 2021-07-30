@@ -1,10 +1,3 @@
-// ***** TODO:
-//
-//             make button for user to favourite a map
-//
-//
-
-
 // define a default user location at Vancouver
 window.user = { latitude: 49.260833, longitude: -123.113889 };
 
@@ -82,8 +75,67 @@ $(document).ready(function () {
     });
   };
 
+  const renderPins = (map) => {
+    const map_id = map.id;
+    const map_name = map.name;
+    const $sidebar = $('.sidebar');
+    $sidebar.empty();
+    //get pin buttons from maps
+    $.get(`/api/mapPins/${map_id}`, (obj) => {
+      const $h3 = $(`<div class='pins-container'><h3>Pins for ${map_name}</h3></div><br>`);
+      $h3.appendTo($sidebar);
+      for (let i = 0; i < obj.length; i++) {
+        const { id, title, latitude, longitude } = obj[i];
+        const distance = userDistance([latitude, longitude]);
+        const ids = id.toString() + "-" + map_id.toString();
+        console.log("id to string", ids);
+        const pinButton = $(`<div class='pinButtons'><div>${title}</div> ${distance}m away </div>`);
+        const deleteButton = $(`<div class="deleteButtons">delete</div><br><br>`);
+        console.log('pinButton', pinButton);
+        $(pinButton).attr('id', id);
+        $(deleteButton).attr('id', ids);
+        pinButton.appendTo($h3);
+        deleteButton.appendTo($h3);
+      }
+    })
+      .then(() => {
+        // make create pin button
+        const $createPin = $(`<div><button class="createPin" id="${map_id}">create pin</button></div>`);
+        $createPin.appendTo($('.pins-container'));
+        const $backButton = $('</br><button>back</button>')
+        $backButton.appendTo($('.sidebar'))
+        $($backButton).on('click', function () {
+          renderNav();
+          getAllPins();
+        });
+      })
+  };
+
+  // deleting specific pin
+  $('.sidebar').on('click', '.deleteButtons', function() {
+    const id = $(this).attr('id'); // pin_id,map_id
+    const $this =  $(this);
+    console.log($this);
+    const ids = id.split('-');
+    const pin_id = ids[0];
+    const map_id = ids[1];
+    console.log('pins', pin_id, map_id)
+    //post returns updated map_id without pins
+    $.ajax({
+      url: `/api/mapPins/${pin_id}/${map_id}`,
+      type: 'DELETE',
+      success: function(result) {
+        console.log('button deleted');
+        $.get(`/api/maps/${map_id}`, (obj) => {
+        console.log('after deleting relationship got:', obj.maps[0]);
+        renderPins(obj.maps[0]);
+        });
+      }
+    });
+  });
+
   // clicking any map button
-  $('.sidebar').on('click', '.map-button', function () {
+  $('.sidebar').on('click', '.map-button', function() {
     // remove all the user defined map layers on map
     map.eachLayer(function (layer) {
       if (layer.map_id) {
@@ -93,13 +145,6 @@ $(document).ready(function () {
     if (window.allPins) {
       map.removeLayer(window.allPins);
     }
-
-    // show all pins on map
-    // map.eachLayer(function (layer) {
-    //   if (layer.map_id) {
-    //     layer.addTo(map);
-    //   }
-    // });
 
     const buttonID = $(this).attr('id');
     console.log("button ID = " + buttonID);
@@ -120,31 +165,8 @@ $(document).ready(function () {
       const $sidebar = $('.sidebar');
       $sidebar.empty();
 
+      renderPins(result.maps[0]);
 
-
-      //get pin buttons from maps
-      $.get(`/api/mapPins/${map_id}`, (obj) => {
-        const $h3 = $(`<div class='pins-container'><h3>Pins for ${map_name}</h3></div><br>`);
-        $h3.appendTo($('.sidebar'));
-        for (let i = 0; i < obj.length; i++) {
-          const { id, title, latitude, longitude } = obj[i];
-          const distance = userDistance([latitude, longitude]);
-          const pinButton = $(`<div class='pinButtons'><div>${title}</div> ${distance}m away </div><br>`);
-          $(pinButton).attr('id', `${id}`);
-          pinButton.appendTo($h3);
-        }
-      })
-        .then(() => {
-          // make create pin button
-          const $createPin = $(`<div><button class="createPin" id="${map_id}">create pin</button></div>`);
-          $createPin.appendTo($('.pins-container'));
-          const $backButton = $('</br><button>back</button>')
-          $backButton.appendTo($('.sidebar'))
-          $($backButton).on('click', function () {
-            renderNav();
-            getAllPins();
-          });
-        })
       $('.sidebar').on('click', '.pinButtons', function () {
         const buttonID = $(this).attr('id');
         console.log('pin button clicked id:', buttonID);
