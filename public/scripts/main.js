@@ -102,16 +102,15 @@ $(document).ready(function () {
       const $sidebar = $('.sidebar');
       $sidebar.empty();
 
-      // add map to favourites
+      //make add button link
       const $addtoFave = $('<a href="#" class="addFave">Add map to Favourites</a>')
       $addtoFave.appendTo($sidebar)
 
+      // add map to favourites
       $('.sidebar').on('click', '.addFave', () => {
-        $.ajax({
-          url: '/api/faveMaps/',
-          type: "POST",
-          data: { map_id: buttonID, user_id: window.user.id },
-        })
+        console.log(`map_id ${buttonID}, user_id: ${window.user.id}`)
+        $.post('/api/faveMaps/', { map_id: buttonID, user_id: window.user.id }),
+        renderNav();
       })
 
       //get pin buttons from maps
@@ -329,8 +328,6 @@ $(document).ready(function () {
       }
     })
   };
-
-
 
 
   /* get current logged in user object from the users table and set it to global variable
