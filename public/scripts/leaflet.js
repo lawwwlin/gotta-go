@@ -39,7 +39,8 @@ $(() => {
       $('div.pin_container').empty();
       $('div.pin_container').append($nav);
       $('div.pin_details').addClass('left_side') //animate this
-      $('.toggle_button').removeClass('toggle_close').addClass('toggle_open')
+      $('.toggle_button').removeClass('toggle_open').addClass('toggle_close')
+      map.flyTo([pin.latitude, pin.longitude], 15);
     })
     return marker;
   }

@@ -136,17 +136,35 @@ $(document).ready(function () {
         console.log('pin button clicked id:', buttonID);
         $.getJSON(`http://localhost:8080/api/pins/${buttonID}`, function (result) {
           console.log('result', result);
-          const pin_lat = result.pins[0].latitude;
-          const pin_long = result.pins[0].longitude;
+          const pin = result.pins[0];
+          const pin_lat = pin.latitude;
+          const pin_long = pin.longitude;
           map.flyTo([pin_lat, pin_long], 17);
-          map.eachLayer(function (layer) {
-            console.log(layer);
-            if (layer.pin_id == buttonID) {
-              console.log('found a match, pin:', layer.pin_id);
-              mapLayers.openPopup();
-            }
-            // layer.eachLayer(function (marker) {
-            // });
+          window.mapLayers.eachLayer(function (layer) {
+            layer.eachLayer(function (marker) {
+              if (marker.pin_id == buttonID) {
+                console.log('found a match, pin:', marker.pin_id);
+                marker.openPopup();
+
+                // refactor into a function
+                const $title = $('<header>', {'class': 'pin_title'}).text(pin.title);
+                const $img = $('<img>', {'class': 'image'}).attr('src', pin.image_url);
+                const $description = $('<p>', { 'class': 'write_up'}).text(pin.description);
+                const $descriptionDiv = $('<div>', { 'class': 'description'});
+                const $nav = $('<nav>', {'class': 'pin_bar'});
+                const $footer = $('<footer>');
+                const $rateButton = $('<button>', {'class': 'edit_pin'}).text('Rate Bathroom');
+                const $editButton = $('<button>', {'class': 'edit_pin'}).text('edit pin').attr('hidden', true);
+                const $addButton = $('<button>', {'class': 'add_pin'}).attr('hidden', true).text('report pin');
+                $descriptionDiv.append($img, $description);
+                $footer.append($rateButton, $editButton, $addButton);
+                $nav.append($title, $descriptionDiv, $footer);
+                $('div.pin_container').empty();
+                $('div.pin_container').append($nav);
+                $('div.pin_details').addClass('left_side') //animate this
+                $('.toggle_button').removeClass('toggle_open').addClass('toggle_close')
+              }
+            });
           });
         })
       })
