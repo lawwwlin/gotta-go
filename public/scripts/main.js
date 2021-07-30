@@ -85,12 +85,14 @@ $(document).ready(function () {
   // clicking any map button
   $('.sidebar').on('click', '.map-button', function () {
     // remove all the user defined map layers on map
-    map.removeLayer(allPins);
     map.eachLayer(function (layer) {
       if (layer.map_id) {
         map.removeLayer(layer);
       }
     });
+    if (window.allPins) {
+      map.removeLayer(window.allPins);
+    }
 
     // show all pins on map
     // map.eachLayer(function (layer) {
@@ -140,6 +142,7 @@ $(document).ready(function () {
           $backButton.appendTo($('.sidebar'))
           $($backButton).on('click', function () {
             renderNav();
+            getAllPins();
           });
         })
       $('.sidebar').on('click', '.pinButtons', function () {

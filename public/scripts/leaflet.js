@@ -58,13 +58,15 @@ $(() => {
   }
 
   // get all pins
-  const getAllPins = () => {
+  window.getAllPins = (cb) => {
     map.eachLayer(function (layer) {
       if (layer.map_id) {
         map.removeLayer(layer);
       }
     });
-    // map.removeLayer(window.allPins);
+    if (window.allPins) {
+      map.removeLayer(window.allPins);
+    }
     $.get('/api/pins/', (obj) => {
       window.allPins = L.layerGroup();
       for (const pin of obj.pins) {
