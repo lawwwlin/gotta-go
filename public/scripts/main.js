@@ -1,5 +1,5 @@
 // ***** TODO:
-//             render all the pins at once
+//
 //             make button for user to favourite a map
 //
 //
@@ -304,9 +304,9 @@ $(document).ready(function () {
       $pin_bar.append($pinform);
       $('div.pin_details').addClass('left_side') //animate this
       $('.toggle_button').removeClass('toggle_open').addClass('toggle_close')
-      let marker = {};
 
-      map.on('click', function(e) {
+      window.marker = {};
+      window.onClickMap = (e) => {
         lat = e.latlng.lat;
         lon = e.latlng.lng;
         if (marker != undefined) {
@@ -321,7 +321,9 @@ $(document).ready(function () {
         $('input.pinlat').val(e.latlng.lat)
         $('input.pinlng').val(e.latlng.lng)
         $('#form-map-id').val(map_id);
-      });
+      };
+
+      map.on('click', onClickMap);
     })
 
     $pinform.submit((event) => {
@@ -352,7 +354,11 @@ $(document).ready(function () {
       e.preventDefault();
       console.log('cancel clicked');
       const $pin_bar = $('div.pin_container');
-      map.off();
+      const div = L.DomUtil.get('div_id');
+
+      map.off('click', onClickMap);
+      map.removeLayer(window.marker);
+
       // TODO: remove layer for temp pin
       $pin_bar.empty();
       $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
