@@ -14,6 +14,7 @@ $(() => {
 
   function makePin(pin) {
     const marker = L.marker([pin.latitude, pin.longitude]);
+    marker.pin_id = pin.id;
     const title = pin.title;
     const description = pin.description;
     //create popup
@@ -57,49 +58,34 @@ $(() => {
 
   // map: {{mapleLayer1: [marker1, marker 2]}, {mapleLayer2: [marker1, marker 2]}, {mapleLayer3: [marker1, marker 2]}}
   // add layers to Map
-  $.get(`/api/maps/`, (obj) => {
-    console.log("getting maps", obj);
-    const temp = {};
-    const mapLayers = L.layerGroup();
-    for (let i = 0; i < obj.maps.length; i++) {
-      const map_id = obj.maps[i].id;
-      temp[i] = map_id;
+  $.get(`/api/maps/`, (maps) => {
+    console.log("getting maps", maps);
+    // global object mapLayers
+    window.mapLayers = L.layerGroup();
+    // for each map
+    for (let i = 0; i < maps.maps.length; i++) {
+      const map = maps.maps[i];
+      const map_id = map.id;
+      // new mapLayer for each map
       const mapLayer = L.layerGroup();
-      mapLayer.addTo(mapLayers);
+      // getting pins from specific map_id
+      $.get(`/api/mapPins/${map_id}`, (pins) => {
+        // add a map_id object to the map and set it to this map's id
+        mapLayer['map_id'] = map_id;
+        for (const i in pins) {
+          const pin = pins[i];
+          const tempPin = makePin(pin);
+          console.log('tempPin', tempPin);
+          tempPin.addTo(mapLayer);
+          console.log('added 1 pin to mapLayer', mapLayer.getLayers());
+        }
+        mapLayer.addTo(window.mapLayers);
+        console.log(`finished adding pins to map ${map_id}:}`)
+        console.log(mapLayer.getLayers())
+        console.log('current mapLayers', window.mapLayers.getLayers())
+      });
     }
-
-    let counter = 0;
-    mapLayers.eachLayer(function(layer) {
-      // assign
-      layer.layerID = temp[counter];
-      counter+=1;
-    });
-
-    //add Pins to layers
-    $.get(`/api/pins/`, (obj) => {
-      console.log('adding all the pins', obj);
-      for (const pin of obj.pins) {
-        $.get(`/api/mapPins/${pin.id}`, (obj) => {
-          // const { pin_id, creator_id, title, description, image_url, latitude, longitude, map_id } = obj.pins;
-          for (let i = 0; i < obj.length; i++) {
-            // console.log('map id?', typeof obj[i].map_id)
-            // console.log('all the layers', mapLayers.getLayers());
-            mapLayers.eachLayer(function (layer) {
-              console.log('layer id', layer.layerID, 'map id', obj[i].map_id)
-              if (layer.id === obj[i].map_id) {
-                console.log('making pin for layer.id');
-                makePin(obj[i]).addTo(mapLayers.getLayer(obj[i].map_id));
-              }
-            });
-          }
-        });
-      }
-    });
   });
-
-
-
-
 
   // //used to control loading of pins/handle lag
   // map.on('load', function () {

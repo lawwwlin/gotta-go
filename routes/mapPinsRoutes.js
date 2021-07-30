@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = (db) => {
-  //retrieves all maps in database
+  //retrieve pins for specific map in database
   router.get("/:id", (req, res) => {
     //    console.log('/api/mapPins');
     const map_id = req.params.id;
-    db.query(`SELECT map_pins.pin_id, pins.creator_id, pins.title, pins.description, pins.image_url, pins.latitude, pins.longitude, map_pins.map_id
+    db.query(`SELECT pins.*
       FROM map_pins
-      JOIN pins ON pins.id =  pin_id
+      JOIN pins ON pins.id = pin_id
       WHERE map_id = $1;`, [map_id])
       .then(data => {
         const mapPins = data.rows;

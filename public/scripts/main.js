@@ -87,6 +87,12 @@ $(document).ready(function () {
 
   // clicking any map button
   $('.sidebar').on('click', '.map-button', function () {
+    // remove all the user defined map layers on map
+    map.eachLayer(function (layer) {
+      if (layer.map_id) {
+        map.removeLayer(layer);
+      }
+    });
     const buttonID = $(this).attr('id');
     console.log("button ID = " + buttonID);
 
@@ -96,6 +102,12 @@ $(document).ready(function () {
       const map_lat = result.maps[0].latitude;
       const map_long = result.maps[0].longitude;
       const map_name = result.maps[0].name;
+
+      window.mapLayers.eachLayer(function (layer) {
+        if (layer.map_id === map_id) {
+          layer.addTo(map);
+        }
+      });
       map.flyTo([map_lat, map_long], 15);
       const $sidebar = $('.sidebar');
       $sidebar.empty();
@@ -105,10 +117,10 @@ $(document).ready(function () {
         const $h3 = $(`<div><h3>Pins for ${map_name}</h3></div><br>`);
         $h3.appendTo($('.sidebar'));
         for (let i = 0; i < obj.length; i++) {
-          const { pin_id, title, latitude, longitude } = obj[i];
+          const { id, title, latitude, longitude } = obj[i];
           const distance = userDistance([latitude, longitude]);
-          const pinButton = $(`<div class='pinButtons'>${title} ${distance} away</div><br>`);
-          $(pinButton).attr('id', `${pin_id}`);
+          const pinButton = $(`<div class='pinButtons'><div>${title}</div> ${distance}m away </div><br>`);
+          $(pinButton).attr('id', `${id}`);
           pinButton.appendTo($h3);
         }
       })
@@ -121,12 +133,21 @@ $(document).ready(function () {
         })
       $('.sidebar').on('click', '.pinButtons', function () {
         const buttonID = $(this).attr('id');
+        console.log('pin button clicked id:', buttonID);
         $.getJSON(`http://localhost:8080/api/pins/${buttonID}`, function (result) {
           console.log('result', result);
           const pin_lat = result.pins[0].latitude;
           const pin_long = result.pins[0].longitude;
           map.flyTo([pin_lat, pin_long], 17);
-          //layer.openPopup([pin_lat, pin_long]);
+          map.eachLayer(function (layer) {
+            console.log(layer);
+            if (layer.pin_id == buttonID) {
+              console.log('found a match, pin:', layer.pin_id);
+              mapLayers.openPopup();
+            }
+            // layer.eachLayer(function (marker) {
+            // });
+          });
         })
       })
     })
