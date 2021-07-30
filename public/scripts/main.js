@@ -93,7 +93,7 @@ $(document).ready(function () {
     $.get(`/api/mapPins/${map_id}`, (obj) => {
       if (userIsLoggedIn()){
         //make add button link
-        const $addtoFave = $(`<div class="addFave" id="${map_id}">Add Map to Favourites</div>`)
+        const $addtoFave = $(`<div class="addFave" id="${map_id}">Add Map to Favourites 👍</div>`)
         $addtoFave.appendTo($sidebar)
       }
       const $h3 = $(`<div class='pins-container'><h3>Pins for ${map_name}</h3></div><br>`);
@@ -105,11 +105,11 @@ $(document).ready(function () {
         const distance = userDistance([latitude, longitude]);
         const ids = id.toString() + "-" + map_id.toString();
         console.log("id to string", ids);
-        const pinButton = $(`<div class='pinButtons'><div>${title}</div> ${distance}m away </div><br>`);
+        const pinButton = $(`<div class='pinButtons'><div>${title}</div> ${distance}m away </div>`);
         $(pinButton).attr('id', id);
         pinButton.appendTo($h3);
         if (loggedIn) {
-          const deleteButton = $(`<div class="deleteButtons">delete</div><br><br>`);
+          const deleteButton = $(`<div class="deleteButtons"><button>❌ delete ❌</button></div><br>`);
           $(deleteButton).attr('id', ids);
           deleteButton.appendTo($h3);
         }
@@ -121,7 +121,7 @@ $(document).ready(function () {
           const $createPin = $(`<div><button class="createPin" id="${map_id}">create pin</button></div>`);
           $createPin.appendTo($('.pins-container'));
         }
-        const $backButton = $('</br><button>back</button>')
+        const $backButton = $('<button class="back">back 🠔</button>')
         $backButton.appendTo($('.sidebar'))
         $($backButton).on('click', function () {
           renderNav();
@@ -261,6 +261,7 @@ $(document).ready(function () {
 
   $('div.pin_container').on('submit', '.pinForm', function(event) {
     event.preventDefault();
+    window.map.off('click', onClickMap);
     const data = $('.pinForm').serialize();
     console.log('form submitted, data is', data);
     // get map_id
@@ -279,7 +280,6 @@ $(document).ready(function () {
         });
         addLayer();
         renderNav();
-        map.off('click', onClickMap);
         $('.pin_container').empty();
         $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
         $('.toggle_button').toggleClass('toggle_close');
@@ -293,8 +293,8 @@ $(document).ready(function () {
     console.log('cancel clicked');
     const $pin_bar = $('div.pin_container');
 
-    map.off('click', onClickMap);
-    map.removeLayer(window.marker);
+    window.map.off('click', onClickMap);
+    window.map.removeLayer(window.marker);
 
     $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
     $('.toggle_button').toggleClass('toggle_close');
@@ -320,7 +320,7 @@ $(document).ready(function () {
       $(".sidebar header").text(`user: ${username}`);
 
       // make nearby button
-      const $nearbyMapButton = $('<div class="nearByMaps"><button>Nearby Maps</button></div>');
+      const $nearbyMapButton = $('<div class="nearByMaps"><button class="nearByButton">Nearby Maps</button></div>');
       $nearbyMapButton.appendTo($('.sidebar'));
 
       // make create map button

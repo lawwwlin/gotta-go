@@ -13,12 +13,24 @@ $(() => {
   const createMap = false;
 
   const makePin = (pin) => {
-    const marker = L.marker([pin.latitude, pin.longitude]);
+
+
+    const myIcon = L.icon({
+      iconUrl: src = '/images/toilet.png',
+      iconSize: [38, 38],
+      iconAnchor: [20, 20],
+      popupAnchor: [0, -15]
+    });
+
+
+
+    const marker = L.marker([pin.latitude, pin.longitude], { icon: myIcon });
     marker.pin_id = pin.id;
     const title = pin.title;
     const description = pin.description;
     //create popup
     marker.bindPopup(`<h3> ${title} </h3> <br> ${userDistance([pin.latitude, pin.longitude])}m away`);
+
     //behaviour for when marker is clicked
     marker.on('click', function() {
       const $title = $('<header>', {'class': 'pin_title'}).text(title);
