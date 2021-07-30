@@ -147,11 +147,15 @@ $(document).ready(function () {
         $.get(`/api/maps/${map_id}`, (obj) => {
           console.log('after deleting relationship got:', obj.maps[0]);
           renderPins(obj.maps[0]);
-          map.eachLayer(function (layer) {
-            if (layer.pin_id == pin_id) {
-              map.removeLayer(layer);
+          window.map.eachLayer(function (layer) {
+            if (layer.map_id) {
+              window.map.removeLayer(layer);
             }
           });
+          addLayer();
+          $('div.pin_container').empty();
+          $('div.pin_details').removeClass('left_side'); //animate this
+          $('.toggle_button').removeClass('toggle_open').addClass('toggle_close');
         });
       }
     });
