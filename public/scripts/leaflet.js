@@ -12,7 +12,7 @@ $(() => {
   //set to true if create map is selected
   const createMap = false;
 
-  function makePin(pin) {
+  const makePin = (pin) => {
     const marker = L.marker([pin.latitude, pin.longitude]);
     marker.pin_id = pin.id;
     const title = pin.title;
@@ -103,6 +103,7 @@ $(() => {
           mapLayer.addTo(window.mapLayers);
         });
       }
+      window.mapLayers.addTo(window.map);
     });
   };
   addLayer();

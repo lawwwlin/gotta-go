@@ -60,13 +60,17 @@ $(document).ready(function () {
   // sidebar /header user not logged in/
 
   const getMapNearUserLocation = () => {
+    console.log('getMapNearUserLocation')
     $('.sidebar h3').empty();
     $('.nearByMaps').empty();
     $('.sidebar footer').empty();
-    const $div = $(`<div><h3>Nearby Maps</h3><div class='mapButtons'></div></div>`);
+    $('.mapButtons').empty();
+    $('.fav-map-div').empty();
+    const $div = $(`<div><h3>Nearby Maps</h3><div class='nearbyMapButtons'></div></div>`);
+    $('.nearbyMapButtons').empty();
     $div.appendTo($('.sidebar'));
     $.get(`/api/maps/${window.user.latitude}/${window.user.longitude}`, (obj) => {
-      const mapDiv = $('.mapButtons');
+      const mapDiv = $('.nearbyMapButtons');
       console.log('map obj according to location', obj.maps);
       for (let i = 0; i < obj.maps.length; i++) {
         const map_name = obj.maps[i].name;
@@ -77,7 +81,6 @@ $(document).ready(function () {
         mapButton.appendTo(mapDiv);
       }
     });
-
   };
 
   const renderPins = (map) => {
@@ -86,11 +89,11 @@ $(document).ready(function () {
     const map_name = map.name;
     const $sidebar = $('.sidebar');
     $sidebar.empty();
-    //get pin buttons from maps
+    //get pin buttons from map
     $.get(`/api/mapPins/${map_id}`, (obj) => {
       if (userIsLoggedIn()){
         //make add button link
-        const $addtoFave = $('<a href="#" class="addFave">Add map to Favourites</a>')
+        const $addtoFave = $(`<div class="addFave" id="${map_id}">Add Map to Favourites</div>`)
         $addtoFave.appendTo($sidebar)
       }
       const $h3 = $(`<div class='pins-container'><h3>Pins for ${map_name}</h3></div><br>`);
@@ -154,6 +157,19 @@ $(document).ready(function () {
     });
   });
 
+  // add map to favourites
+  $('.sidebar').on('click', '.addFave', function() {
+    const map_id = $(this).attr('id');
+    console.log(`map_id ${map_id}, user_id: ${window.user.id}`)
+    $.post('/api/faveMaps/', { map_id: map_id, user_id: window.user.id })
+    .then(() => {
+      $('.fav-map-div').empty();
+      $('.nearByMap').empty();
+      $('.sidebar footer').empty();
+      renderNav();
+    });
+  })
+
   // clicking any map button
   $('.sidebar').on('click', '.map-button', function() {
     // remove all the user defined map layers on map
@@ -186,13 +202,6 @@ $(document).ready(function () {
       $sidebar.empty();
 
       renderPins(result.maps[0]);
-
-      // add map to favourites
-      $('.sidebar').on('click', '.addFave', () => {
-        console.log(`map_id ${buttonID}, user_id: ${window.user.id}`)
-        $.post('/api/faveMaps/', { map_id: buttonID, user_id: window.user.id }),
-        renderNav();
-      })
 
       $('.sidebar').on('click', '.pinButtons', function () {
         const buttonID = $(this).attr('id');
@@ -238,6 +247,7 @@ $(document).ready(function () {
 
   // nearby button on click
   $('.sidebar').on('click', '.nearByMaps', function() {
+    $('.sidebar').empty();
     getMapNearUserLocation();
     const $nearByBackButton = $(`<div class="nearByBackButton"><button>back</button></div>`);
     $nearByBackButton.appendTo($('.sidebar'));
@@ -249,11 +259,41 @@ $(document).ready(function () {
   });
 
 
+  $('div.pin_container').on('submit', '.pinForm', function(event) {
+    event.preventDefault();
+    const data = $('.pinForm').serialize();
+    console.log('form submitted, data is', data);
+    // get map_id
+    $.post(`/api/pins/`, data)
+    .then(obj => {
+      const pinID = obj.pin[0].id;
+      const pin = obj.pin[0];
+      console.log('line 323', obj, 'dafs', obj.pin[0].id );
+      // add to database
+      $.post(`/api/mapPins/${obj.map_id}`, {pinID})
+      .then(object => {
+        window.mapLayers.eachLayer(function (layer) {
+          if (layer.map_id || layer.pin_id) {
+            window.map.removeLayer(layer);
+          }
+        });
+        addLayer();
+        renderNav();
+        map.off('click', onClickMap);
+        $('.pin_container').empty();
+        $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
+        $('.toggle_button').toggleClass('toggle_close');
+        map.removeLayer(window.marker);
+      });
+    })
+  });
+
+
   const renderNavLoggedIn = () => {
     const user_id = window.user.id;
     $('.sidebar').empty();
     const $userMaps = $(`<header>user not logged in</header>
-      <div>
+      <div class="container">
         <h3>User Maps</h3>
         <div class='mapButtons'></div>
       </div>`);
@@ -335,15 +375,8 @@ $(document).ready(function () {
       renderNav();
     });
 
-
-
-    //WIP
-    // $('button.cancel').on('click', function () {
-    //   $sidebar.empty()
-    // })
-
-    //form submit for creating pins
-    const $pinform = $(`<form>
+    //form submit for creating pin
+    const $pinform = $(`<form class="pinForm">
     <input type="hidden" name="creator_id" value="${user_id}" />
     <label for="title">Pin Name:</label><br><br>
     <input type="text" name="title" id="name" placeholder="New Pin" /><br><br>
@@ -393,55 +426,36 @@ $(document).ready(function () {
       map.on('click', onClickMap);
     })
 
-    $pinform.submit((event) => {
-      event.preventDefault();
-      const data = $pinform.serialize();
-      console.log('form submitted, data is', data);
-      // get map_id
-      console.log('posting to ajax');
-      $.post(`/api/pins/`, data)
-      .then(obj => {
-        const pinID = obj.pin[0].id;
-        console.log('line 323', obj, 'dafs', obj.pin[0].id );
-        $.post(`/api/mapPins/${obj.map_id}`, {pinID})
-        .then(obj => {
-          renderNav();
-          $('.pin_container').empty();
-          map.off('click', onClickMap);
-          map.removeLayer(window.marker);
-        });
-      })
-    });
+
 
     $('.pin_container').on('click', '.cancel', function(e){
       e.preventDefault();
       console.log('cancel clicked');
       const $pin_bar = $('div.pin_container');
-      const div = L.DomUtil.get('div_id');
 
       map.off('click', onClickMap);
       map.removeLayer(window.marker);
 
-      // TODO: remove layer for temp pin
-      $pin_bar.empty();
       $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
       $('.toggle_button').toggleClass('toggle_close');
+      $pin_bar.empty();
     });
 
     //favourite map buttons
     $.get(`/api/faveMaps/${user_id}`, (obj) => {
-      const mapDiv = $(".mapButtons");
+      const $container = $(".container");
       const $faveMapNav = $(`</br>
         <h3> Favourite Maps </h3>
+        <div class="fav-map-div"></div>
       `)
-      $faveMapNav.appendTo(mapDiv)
-      console.log('fav maps:', obj);
+      $('.fav-map-div').empty();
+      $faveMapNav.appendTo($container);
       for (let i = 0; i < obj.length; i++) {
         const { id, name, username } = obj[i];
         const $faveMapButton = $(`<div>${name}<br>created by: ${username}</div><br>`);
         $($faveMapButton).attr('id', `${id}`);
         $faveMapButton.addClass('map-button');
-        $faveMapButton.appendTo(mapDiv);
+        $faveMapButton.appendTo($('.fav-map-div'));
       }
     })
   };
@@ -457,6 +471,7 @@ $(document).ready(function () {
   };
 
   getUser(() => {
+    updateUserLocation();
     renderNav();
   });
 
@@ -464,7 +479,6 @@ $(document).ready(function () {
     $('.sidebar').empty();
     if (userIsLoggedIn()) {
       console.log('user is logged in');
-      updateUserLocation();
       renderNavLoggedIn();
     } else {
       console.log('usr is not logged in');
