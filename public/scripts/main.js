@@ -288,6 +288,19 @@ $(document).ready(function () {
     })
   });
 
+  $('.pin_container').on('click', '.cancel', function(e){
+    e.preventDefault();
+    console.log('cancel clicked');
+    const $pin_bar = $('div.pin_container');
+
+    map.off('click', onClickMap);
+    map.removeLayer(window.marker);
+
+    $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
+    $('.toggle_button').toggleClass('toggle_close');
+    $pin_bar.empty();
+  });
+
 
   const renderNavLoggedIn = () => {
     const user_id = window.user.id;
@@ -413,7 +426,7 @@ $(document).ready(function () {
           map.removeLayer(marker);
         };
         marker=L.marker(e.latlng).addTo(window.map);
-        marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
+        marker.bindPopup(`Right here?`).openPopup();
         $('p.submit_popup').hide();
         $('button.submit_popup').show();
         $('label.pinlat').show().text(`latitude: ${e.latlng.lat}`)
@@ -428,18 +441,7 @@ $(document).ready(function () {
 
 
 
-    $('.pin_container').on('click', '.cancel', function(e){
-      e.preventDefault();
-      console.log('cancel clicked');
-      const $pin_bar = $('div.pin_container');
 
-      map.off('click', onClickMap);
-      map.removeLayer(window.marker);
-
-      $('.pin_details').toggleClass('left_side', 300, 'easeOutQuint');
-      $('.toggle_button').toggleClass('toggle_close');
-      $pin_bar.empty();
-    });
 
     //favourite map buttons
     $.get(`/api/faveMaps/${user_id}`, (obj) => {
