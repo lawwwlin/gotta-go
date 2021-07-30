@@ -59,7 +59,6 @@ $(() => {
     return marker;
   }
 
-
   //only load pins within radius
   function radiusCheck(pin, rad) {
     const mapLng = map.getCenter().lng

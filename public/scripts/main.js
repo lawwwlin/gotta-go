@@ -102,6 +102,18 @@ $(document).ready(function () {
       const $sidebar = $('.sidebar');
       $sidebar.empty();
 
+      // add map to favourites
+      const $addtoFave = $('<a href="#" class="addFave">Add map to Favourites</a>')
+      $addtoFave.appendTo($sidebar)
+
+      $('.sidebar').on('click', '.addFave', () => {
+        $.ajax({
+          url: '/api/faveMaps/',
+          type: "POST",
+          data: { map_id: buttonID, user_id: window.user.id },
+        })
+      })
+
       //get pin buttons from maps
       $.get(`/api/mapPins/${map_id}`, (obj) => {
         const $h3 = $(`<div><h3>Pins for ${map_name}</h3></div><br>`);
@@ -251,7 +263,7 @@ $(document).ready(function () {
     </form> `);
 
     //clicking createPin button
-    $('.sidebar').on('click', '.createPin', function() {
+    $('.sidebar').on('click', '.createPin', function () {
       const $pin_bar = $('div.pin_container');
       $pin_bar.empty();
       $pin_bar.append($pinform);
@@ -259,13 +271,13 @@ $(document).ready(function () {
       $('.toggle_button').removeClass('toggle_open').addClass('toggle_close')
       let marker = {};
 
-      map.on('click', function(e) {
+      map.on('click', function (e) {
         lat = e.latlng.lat;
         lon = e.latlng.lng;
         if (marker != undefined) {
           map.removeLayer(marker);
         };
-        marker=L.marker(e.latlng).addTo(window.map);
+        marker = L.marker(e.latlng).addTo(window.map);
         marker.bindPopup(`Right here? <button>Yes</button><button>No</button>`).openPopup();
         $('p.submit_popup').hide();
         $('button.submit_popup').show();
@@ -287,7 +299,7 @@ $(document).ready(function () {
     //     });
     // });
 
-    $('.pin_container').on('click', '.cancel', function(e){
+    $('.pin_container').on('click', '.cancel', function (e) {
       e.preventDefault();
       console.log('cancel clicked');
       const $pin_bar = $('div.pin_container');
