@@ -80,29 +80,33 @@ $(() => {
 
   // map: {{mapleLayer1: [marker1, marker 2]}, {mapleLayer2: [marker1, marker 2]}, {mapleLayer3: [marker1, marker 2]}}
   // add layers to Map
-  $.get(`/api/maps/`, (maps) => {
-    console.log("getting maps", maps);
-    // global object mapLayers
-    window.mapLayers = L.layerGroup();
-    // for each map
-    for (let i = 0; i < maps.maps.length; i++) {
-      const map = maps.maps[i];
-      const map_id = map.id;
-      // new mapLayer for each map
-      const mapLayer = L.layerGroup();
-      // getting pins from specific map_id
-      $.get(`/api/mapPins/${map_id}`, (pins) => {
-        // add a map_id object to the map and set it to this map's id
-        mapLayer['map_id'] = map_id;
-        for (const i in pins) {
-          const pin = pins[i];
-          const tempPin = makePin(pin);
-          tempPin.addTo(mapLayer);
-        }
-        mapLayer.addTo(window.mapLayers);
-      });
-    }
-  });
+  window.addLayer = () => {
+    $.get(`/api/maps/`, (maps) => {
+      console.log("getting maps", maps);
+      // global object mapLayers
+      window.mapLayers = L.layerGroup();
+      // for each map
+      for (let i = 0; i < maps.maps.length; i++) {
+        const map = maps.maps[i];
+        const map_id = map.id;
+        // new mapLayer for each map
+        const mapLayer = L.layerGroup();
+        // getting pins from specific map_id
+        $.get(`/api/mapPins/${map_id}`, (pins) => {
+          // add a map_id object to the map and set it to this map's id
+          mapLayer['map_id'] = map_id;
+          for (const i in pins) {
+            const pin = pins[i];
+            const tempPin = makePin(pin);
+            tempPin.addTo(mapLayer);
+          }
+          mapLayer.addTo(window.mapLayers);
+        });
+      }
+    });
+  };
+  addLayer();
+
 
   // //used to control loading of pins/handle lag
   // map.on('load', function () {
