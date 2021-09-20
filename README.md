@@ -10,15 +10,15 @@ It uses the Leaflet.js API to add, remove pins and render the map.
 Todo: take screen shots
 
 ## Tech Stack
-Node.JS
-Express
-Leaflet.js
-EJS
-PosgreSQL
-JQuery
-AJAX
-HTML
-(S)CSS
+* Node.JS
+* Express
+* Leaflet.js
+* EJS
+* PosgreSQL
+* JQuery
+* AJAX
+* HTML
+* (S)CSS
 
 ## Getting Started
 
